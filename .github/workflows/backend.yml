@@ -1,0 +1,28 @@
+name: Backend
+
+on:
+  push:
+    branches: [ "main", "staging" ]
+    paths:
+    - 'backend/**'
+  pull_request:
+    branches: [ "main", "staging" ]
+    paths:
+    - 'backend/**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    - name : Setup node 
+      uses: actions/setup-node@v3.6.0
+      with: 
+        node-version: 18.4.2
+    - run: npm ci
+    - run: npm run build
+    - run: npm test
+    
+    - name: Build the Docker image
+      run: docker build ./backend --file Dockerfile --tag backend:$(date +%s)
