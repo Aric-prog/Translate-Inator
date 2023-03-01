@@ -17,7 +17,8 @@
     "lint": "eslint . --ext .ts",
     "build": "rm -rf ./dist/ && tsc --build",
     "watch": "tsc -w",
-    "dev": "nodemon ./src/index.ts"
+    "dev": "nodemon ./src/index.ts",
+    "test" : ""
   },
   "watch": {
     "lint": "./index.ts"
