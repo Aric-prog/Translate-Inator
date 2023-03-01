@@ -6,6 +6,7 @@ import SignUpDTO from "../dto/SignUpDTO.js";
 import { inject, injectable } from "inversify";
 import User from "../../database/models/User.js";
 import InvalidInputException from "../../exceptions/InvalidInputException.js";
+import LoginDTO from "../dto/LoginDTO.js";
 
 @injectable()
 export default class AuthService {
@@ -18,23 +19,24 @@ export default class AuthService {
         const [hashedPassword, salt] = this.createNewPasswordHash(
             signupDto.password
         );
+
         this.authRepository.insertUser(
             signupDto.email,
             signupDto.username,
             hashedPassword,
             salt
         );
-
-        const jwtToken = await this.login(signupDto.email, hashedPassword);
-        return jwtToken;
+        
+        return jwt.sign({}, SECRET.PRIVATE_KEY, {
+            expiresIn: "1d",
+        });
     }
-    async login(email: string, password: string): Promise<string> {
+    async login(loginDTO : LoginDTO): Promise<string> {
         // Authenticate them here by checking if their input = hash
-        const userId: number = null;
-        const user: User = await this.authRepository.getUserById(userId);
+        const user: User = await this.authRepository.getUserByEmail(loginDTO.email);
 
         if (!user) throw new InvalidInputException("Invalid login credentials");
-        if (this.createPasswordHash(password, user.salt) != user.hashedPassword)
+        if (this.createPasswordHash(loginDTO.password, user.salt) != user.hashedPassword)
             throw new InvalidInputException("Invalid login credentials");
 
         return jwt.sign({}, SECRET.PRIVATE_KEY, {

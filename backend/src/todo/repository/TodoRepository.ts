@@ -1,11 +1,23 @@
-export const createNewEntry = async (entries: string[]) => {
-    return;
-};
+import { inject, injectable } from "inversify";
+import { Client } from "pg";
+import DbService from "../../database/db.js";
 
-export const checkEntry = async (entryId: number) => {
-    return;
-};
+@injectable()
+export default class TodoRepository{
+    private readonly db: Client;
+    
+    constructor(@inject(DbService) dbService : DbService) {
+        this.db = dbService.db;
+    }
+    async createNewEntry(entries: string[])  {
+        return;
+    }
 
-export const deleteEntry = async (entryId: number) => {
-    return;
-};
+    async updateEntryStatus(entryId: number) {
+        return;
+    }
+
+    async deleteEntry(entryId: number) {
+        return;
+    }
+}
