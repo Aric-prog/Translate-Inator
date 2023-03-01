@@ -2,15 +2,17 @@ import AuthRepository from "../repository/AuthRepository.js";
 import * as jwt from "jsonwebtoken";
 import { SECRET } from "../../config/secret.js";
 import { createHash, randomBytes } from "crypto";
-import NotFoundException from "../../exceptions/NotFoundException.js";
 import SignUpDTO from "../dto/SignUpDTO.js";
-import { injectable } from "inversify";
+import { inject, injectable } from "inversify";
 import User from "../../database/models/User.js";
 import InvalidInputException from "../../exceptions/InvalidInputException.js";
 
 @injectable()
 export default class AuthService {
-    constructor(private readonly authRepository: AuthRepository) {}
+    private readonly authRepository;
+    constructor(@inject(AuthRepository) authRepository: AuthRepository) {
+        this.authRepository = authRepository;
+    }
 
     async signUp(signupDto: SignUpDTO): Promise<string> {
         const [hashedPassword, salt] = this.createNewPasswordHash(
@@ -31,7 +33,7 @@ export default class AuthService {
         const userId: number = null;
         const user: User = await this.authRepository.getUserById(userId);
 
-        if (!user) throw new NotFoundException("Invalid login credentials");
+        if (!user) throw new InvalidInputException("Invalid login credentials");
         if (this.createPasswordHash(password, user.salt) != user.hashedPassword)
             throw new InvalidInputException("Invalid login credentials");
 

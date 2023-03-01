@@ -14,17 +14,17 @@ export default class App {
     protected readonly container: Container;
 
     constructor() {
-        const container = new Container();
+        this.container = new Container();
         this.bindService();
         this.setup();
     }
 
     bindService() : void{
-        this.container.bind(AuthService).toSelf();
         this.container.bind(AuthRepository).toSelf();
+        this.container.bind(AuthService).toSelf();
     }
 
-    async setup(){
+    setup(){
         const server: InversifyExpressServer = new InversifyExpressServer(this.container);
         server.setConfig((app) => {
             app.use(express.json());
@@ -34,8 +34,9 @@ export default class App {
         });
         const app = server.build();
         app.listen(PORT, () => {
-            console.log(process.env.WEB_APP_HOST);
+            console.log("Server is running at PORT : " + PORT);
         });
     }
 }
+new App();
 
