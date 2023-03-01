@@ -1,4 +1,4 @@
-export default class User {
+export default class Account {
     id: number;
     username: string;
     email: string;

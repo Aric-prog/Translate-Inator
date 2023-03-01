@@ -1,13 +1,9 @@
 import { injectable } from "inversify";
-import { Client } from "pg";
+import { Pool } from "pg";
 @injectable()
 export default class DbService {
-    readonly db: Client;
+    readonly db: Pool;
     constructor() {
-        this.db = new Client();
-    }
-
-    async connect() {
-        return await this.db.connect();    
+        this.db = new Pool();
     }
 }

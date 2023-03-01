@@ -5,12 +5,14 @@ services:
     image: postgres:15.2-alpine
     volumes:
       - ./postgres_data/psql:/var/lib/postgresql/data
+      - ./backend/src/database/scripts/create_tables.sql:/docker-entrypoint-initdb.d/create_tables.sql
     ports:
       - "5432:5432"
     environment:
       POSTGRES_DB: video_db
       POSTGRES_USER: root
       POSTGRES_PASSWORD: qwerty
+      
   backend:
     build: ./backend
     ports: 

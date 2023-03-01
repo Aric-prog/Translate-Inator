@@ -27,9 +27,6 @@ export default class App {
     }
 
     async setup(){
-        const dbService = this.container.get(DbService);
-        await dbService.connect();
-
         const server: InversifyExpressServer = new InversifyExpressServer(this.container);
 
         server.setConfig((app) => {
