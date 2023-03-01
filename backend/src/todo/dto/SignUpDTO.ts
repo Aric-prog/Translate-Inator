@@ -1,5 +1,4 @@
-import { check, oneOf } from "express-validator";
-import User from "../../models/User.js";
+import { check } from "express-validator";
 
 export default class SignUpDTO {
     username: string;

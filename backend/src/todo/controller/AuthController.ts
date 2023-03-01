@@ -1,5 +1,4 @@
 import { NextFunction, Request, Response } from "express";
-import { check, validationResult } from "express-validator";
 import * as AuthService from "../service/AuthService.js";
 
 import { STATUS_CODE } from "../../constants/httpConstants.js";
