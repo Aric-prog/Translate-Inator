@@ -4,7 +4,9 @@ export default class SignUpDTO {
     username: string;
     password: string;
     email: string;
-    constructor(username: string, password: string) {
+
+    constructor(email: string, username: string, password: string) {
+        this.email = email;
         this.username = username;
         this.password = password;
     }

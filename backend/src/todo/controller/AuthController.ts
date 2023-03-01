@@ -1,22 +1,22 @@
-import { NextFunction, Request, Response } from "express";
-import * as AuthService from "../service/AuthService.js";
+import { Request, Response } from "express";
+import { inject } from "inversify";
+import { controller, httpPost } from "inversify-express-utils";
 
 import { STATUS_CODE } from "../../constants/httpConstants.js";
 import SignUpDTO from "../dto/SignUpDTO.js";
+import AuthService from "../service/AuthService.js";
 
-export const signUp = async (
-    req: Request,
-    res: Response,
-    next: NextFunction
-) => {
-    try {
-        const response = await AuthService.signUp(req.body as SignUpDTO);
-        return res.status(STATUS_CODE.OK).send(response);
-    } catch (e) {
-        next(e);
+@controller("/auth")
+export default class AuthController {
+    private readonly authService: AuthService;
+    constructor(@inject(AuthService) authService: AuthService) {
+        this.authService = authService;
     }
-};
 
-export const login = async () => {
-    return;
-};
+
+    @httpPost("/signup")
+    async signUp(req: Request, res: Response) {
+        const response = await this.authService.signUp(req.body as SignUpDTO);
+        return res.status(STATUS_CODE.OK).json(response);
+    }
+}

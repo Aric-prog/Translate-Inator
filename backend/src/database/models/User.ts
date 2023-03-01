@@ -4,4 +4,5 @@ export default class User {
     email: string;
     hashedPassword: string;
     isAdmin: boolean;
+    salt: string;
 }
