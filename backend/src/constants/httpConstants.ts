@@ -1,5 +1,5 @@
-export const HTTP_RESPONSE = {
+export const STATUS_CODE = {
     OK: 200,
     ERROR: 500,
-    BAD_INPUT: 422,
+    VALIDATION_FAILURE: 422,
 };
