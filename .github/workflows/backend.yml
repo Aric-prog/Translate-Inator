@@ -1,4 +1,4 @@
-name: Backend
+name: Backend 
 on:
   push:
     branches:
@@ -6,23 +6,30 @@ on:
       - staging
     paths:
       - backend/**
+      - .github/workflows/**
   pull_request:
     branches:
       - main
       - staging
     paths:
       - backend/**
+      - .github/workflows/**
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Setup node
+      - name: Build node
         uses: actions/setup-node@v3.6.0
+        working-directory : ./backend
         with:
           node-version: 18
-      - run: npm ci
-      - run: npm run build
-      - run: npm test
+        run: |
+          npm ci
+          npm run build
+
+      - name: Test node
+        working-directory : ./backend
+        run: npm test
       - name: Build the Docker image
         run: docker build ./backend --file Dockerfile --tag backend:$(date +%s)
