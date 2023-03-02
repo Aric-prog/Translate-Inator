@@ -11,8 +11,8 @@ export default class TodoService {
         this.todoRepository = todoRepository;
     }
 
-    async createTodo(createTodoDTO: CreateTodoDTO): Promise<Todo> {
-        this.todoRepository.createNewTodo(1, createTodoDTO.entry);
+    async createTodo(accountId: number , createTodoDTO: CreateTodoDTO): Promise<Todo> {
+        this.todoRepository.createNewTodo(accountId, createTodoDTO.entry);
         return;
     }
 

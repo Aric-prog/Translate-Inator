@@ -18,6 +18,7 @@ export default class TodoController {
     @httpPost("/todo", ValidateRequest.using(CreateTodoDTO.validator))
     async createTodo(req: Request, res: Response) {
         const response = await this.todoService.createTodo(
+            res.locals.decodedToken.uid,
             req.body as CreateTodoDTO
         );
         return res.status(STATUS_CODE.OK).json(response);

@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import { SECRET } from "../config/Secret.js";
 import { STATUS_CODE } from "../constants/httpConstants.js";
+
 export const authenticated = (
     req: Request,
     res: Response,
@@ -17,7 +18,6 @@ export const authenticated = (
         if(err) next(err);
 
         res.locals.decodedToken = decodedToken;
-        console.log(decodedToken);
         next();
     });
 };

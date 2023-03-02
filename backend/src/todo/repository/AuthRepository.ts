@@ -1,14 +1,16 @@
 import { inject, injectable } from "inversify";
 import pg from "pg";
+import { STATUS_CODE } from "../../constants/httpConstants.js";
 import DbService from "../../database/db.js";
 import Account from "../../database/models/Account.js";
+import { PgErrorMap } from "../../database/types.js";
 
 @injectable()
 export default class AuthRepository {
-    private readonly db: pg.Pool;
+    private readonly db: DbService;
 
     constructor(@inject(DbService) dbService: DbService) {
-        this.db = dbService.db;
+        this.db = dbService;
     }
 
     async insertUser(
@@ -17,11 +19,16 @@ export default class AuthRepository {
         hashedPassword: string,
         salt: string
     ): Promise<number> {
+        const errorMap : PgErrorMap = new Map([
+            ["23505", "Email already used by another account"],
+        ]);
         const { rows } = await this.db.query(
             `
             INSERT INTO account(email, username, hashedpassword, isadmin, salt) 
-            VALUES($1, $2, $3, $4 ,$5) RETURNING ID`,
-            [email, username, hashedPassword, false, salt]
+            VALUES($1, $2, $3, $4 ,$5)
+            RETURNING ID`,
+            [email, username, hashedPassword, false, salt],
+            errorMap
         );
         return rows[0].id;
     }
@@ -32,8 +39,7 @@ export default class AuthRepository {
             [email]
         );
 
-        if (rows.length > 0) return rows[0] as Account;
-        return null;
+        return rows[0] as Account;
     }
 
     async getUserById(userId: number): Promise<Account> {
@@ -41,12 +47,15 @@ export default class AuthRepository {
             `SELECT * FROM account WHERE id = $1`,
             [userId]
         );
-        
-        if (rows.length > 0) return rows[0] as Account;
-        return null;
+
+        return rows[0] as Account;
     }
 
-    async grantAdminPrivilege(userId: number) {
-        return;
+    async grantAdminPrivilege(userId: number): Promise<number> {
+        const { rows } = await this.db.query(
+            `UPDATE account SET isadmin = true WHERE id = $1 RETURNING id`,
+            [userId]
+        );
+        return rows[0].id;
     }
 }

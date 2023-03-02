@@ -40,14 +40,9 @@ export default class App {
 
         dotenv.config({ path: __dirname + "/.env" });
 
-        const dbService: DbService = this.container.get(DbService);
         const server: InversifyExpressServer = new InversifyExpressServer(
             this.container
         );
-
-        // Tests connection
-        const conn = await dbService.db.connect();
-        conn.release();
 
         server.setConfig((app) => {
             app.use(express.json());
@@ -55,6 +50,12 @@ export default class App {
         server.setErrorConfig((app) => {
             app.use(errorHandler);
         });
+
+        // Tests connection
+        const dbService: DbService = this.container.get(DbService);
+        const conn = await dbService.pool.connect();
+        conn.release();
+
         const app = server.build();
         app.listen(process.env.PORT, () => {
             console.log("Server is running at PORT : " + process.env.PORT);

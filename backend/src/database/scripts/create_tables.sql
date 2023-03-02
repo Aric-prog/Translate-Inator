@@ -4,7 +4,8 @@ CREATE TABLE IF NOT EXISTS account(
     username TEXT NOT NULL, 
     hashedPassword TEXT NOT NULL,
     isAdmin BOOL NOT NULL,
-    salt TEXT NOT NULL
+    salt TEXT NOT NULL,
+    UNIQUE(email)
 );
     
 CREATE TABLE IF NOT EXISTS todo(

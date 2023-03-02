@@ -1,6 +1,7 @@
 import { check } from "express-validator";
 
 export default class CreateTodoDTO {
+    
     entry: string;
 
     constructor(entry: string) {

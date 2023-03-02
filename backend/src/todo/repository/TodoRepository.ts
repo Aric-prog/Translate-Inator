@@ -8,7 +8,7 @@ export default class TodoRepository {
     private readonly db: pg.Pool;
 
     constructor(@inject(DbService) dbService: DbService) {
-        this.db = dbService.db;
+        this.db = dbService.pool;
     }
 
     async createNewTodo(accountid: number, entry: string) {
@@ -18,33 +18,44 @@ export default class TodoRepository {
             VALUES($1, $2, $3)`,
             [accountid, entry, false]
         );
-        return;
+        return rows[0] as Todo;
     }
 
-    async getTodoByUser(accountid: number) : Promise<Todo[]> {
+    async getTodoByUser(accountid: number): Promise<Todo[]> {
         const { rows } = await this.db.query(
-            `SELECT * FROM todo WHERE accountid = $1`,
+            `SELECT * FROM todo 
+            WHERE accountid = $1`,
             [accountid]
         );
-        console.log(rows[0]);
-        return;
+        return rows as Todo[];
     }
 
     async getTodoById(todoId: number): Promise<Todo> {
         const { rows } = await this.db.query(
-            `SELECT * FROM todo WHERE id = $1`,
+            `SELECT * FROM todo 
+            WHERE id = $1`,
             [todoId]
         );
-        return;
+        return rows[0] as Todo;
     }
 
-    async updateTodoStatus(todoId: number, isDone: boolean) {
-        const { rows } = await this.db.query(``, [todoId, isDone]);
-        return;
+    async updateTodoStatus(todoId: number, isDone: boolean): Promise<number> {
+        const { rows } = await this.db.query(
+            `UPDATE todo SET isdone = $1 
+            WHERE id = $2 
+            RETURNING id`,
+            [todoId, isDone]
+        );
+        return rows[0].id;
     }
 
-    async deleteTodo(todoId: number) {
-        const { rows } = await this.db.query(``, [todoId]);
-        return;
+    async deleteTodo(todoId: number): Promise<Todo> {
+        const { rows } = await this.db.query(
+            `DELETE FROM todo 
+            WHERE id = $1 
+            RETURNING *`,
+            [todoId]
+        );
+        return rows[0] as Todo;
     }
 }
