@@ -9,26 +9,38 @@ import AuthService from "./todo/service/AuthService.js";
 import AuthRepository from "./todo/repository/AuthRepository.js";
 import DbService from "./database/db.js";
 
-const PORT = process.env.PORT || 8000;
+import * as dotenv from 'dotenv';
+import { fileURLToPath } from "url";
+import path from "path";
+
 
 export default class App {
     private readonly container: Container;
-
+    
     constructor() {
         this.container = new Container();
         this.bindService();
         this.setup();
     }
-
+    
     bindService() : void{
         this.container.bind(DbService).toSelf();
         this.container.bind(AuthRepository).toSelf();
         this.container.bind(AuthService).toSelf();
     }
-
+    
     async setup(){
-        const server: InversifyExpressServer = new InversifyExpressServer(this.container);
+        const __filename = fileURLToPath(import.meta.url);
+        const __dirname = path.dirname(__filename);
+        dotenv.config({path: __dirname + '/.env'});
 
+        const dbService : DbService = this.container.get(DbService);
+        const server: InversifyExpressServer = new InversifyExpressServer(this.container);
+        
+        // Tests connection
+        const conn = await dbService.db.connect();
+        conn.release();
+        
         server.setConfig((app) => {
             app.use(express.json());
         });
@@ -36,8 +48,8 @@ export default class App {
             app.use(errorHandler);
         });
         const app = server.build();
-        app.listen(PORT, () => {
-            console.log("Server is running at PORT : " + PORT);
+        app.listen(process.env.PORT, () => {
+            console.log("Server is running at PORT : " + process.env.PORT);
         });
     }
 }

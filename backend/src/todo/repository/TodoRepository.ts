@@ -1,10 +1,10 @@
 import { inject, injectable } from "inversify";
-import { Pool } from "pg";
+import pg from "pg";
 import DbService from "../../database/db.js";
 
 @injectable()
 export default class TodoRepository{
-    private readonly db: Pool;
+    private readonly db: pg.Pool;
     
     constructor(@inject(DbService) dbService : DbService) {
         this.db = dbService.db;

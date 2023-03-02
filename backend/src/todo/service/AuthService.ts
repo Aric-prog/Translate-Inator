@@ -1,5 +1,5 @@
 import AuthRepository from "../repository/AuthRepository.js";
-import * as jwt from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 import { SECRET } from "../../config/Secret.js";
 import { createHash, randomBytes } from "crypto";
 import SignUpDTO from "../dto/SignUpDTO.js";
@@ -31,6 +31,7 @@ export default class AuthService {
             expiresIn: "1d",
         });
     }
+    
     async login(loginDTO : LoginDTO): Promise<string> {
         // Authenticate them here by checking if their input = hash
         const user: Account = await this.authRepository.getUserByEmail(loginDTO.email);
