@@ -4,7 +4,6 @@ import pg from 'pg';
 export default class DbService {
     readonly db: pg.Pool;
     constructor() {
-        console.log(process.env);
         this.db = new pg.Pool({
             host: process.env.POSTGRES_HOST,
             port: parseInt(process.env.POSTGRES_PORT),

@@ -20,14 +20,14 @@ export default class AuthService {
             signupDto.password
         );
 
-        this.authRepository.insertUser(
+        const id : number = await this.authRepository.insertUser(
             signupDto.email,
             signupDto.username,
             hashedPassword,
             salt
         );
 
-        return jwt.sign({}, SECRET.PRIVATE_KEY, {
+        return jwt.sign({ uid : id }, SECRET.PRIVATE_KEY, {
             expiresIn: "1d",
         });
     }
@@ -40,7 +40,9 @@ export default class AuthService {
         if (this.createPasswordHash(loginDTO.password, user.salt) != user.hashedPassword)
             throw new InvalidInputException("Invalid login credentials");
 
-        return jwt.sign({}, SECRET.PRIVATE_KEY, {
+        return jwt.sign({
+            uid : user.id
+        }, SECRET.PRIVATE_KEY, {
             expiresIn: "1d",
         });
     }

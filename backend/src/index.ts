@@ -1,46 +1,54 @@
 import express from "express";
 import { Container } from "inversify";
 import "reflect-metadata";
+import "./todo/controller/TodoController.js";
 import "./todo/controller/AuthController.js";
-import  "./todo/service/AuthService.js";
+import "./todo/service/AuthService.js";
 import { InversifyExpressServer } from "inversify-express-utils";
 import { errorHandler } from "./middleware/ErrorHandler.js";
 import AuthService from "./todo/service/AuthService.js";
 import AuthRepository from "./todo/repository/AuthRepository.js";
 import DbService from "./database/db.js";
 
-import * as dotenv from 'dotenv';
+import * as dotenv from "dotenv";
 import { fileURLToPath } from "url";
 import path from "path";
-
+import TodoRepository from "./todo/repository/TodoRepository.js";
+import TodoService from "./todo/service/TodoService.js";
 
 export default class App {
     private readonly container: Container;
-    
+
     constructor() {
         this.container = new Container();
         this.bindService();
         this.setup();
     }
-    
-    bindService() : void{
+
+    bindService(): void {
         this.container.bind(DbService).toSelf();
+
+        this.container.bind(TodoRepository).toSelf();
         this.container.bind(AuthRepository).toSelf();
+        this.container.bind(TodoService).toSelf();
         this.container.bind(AuthService).toSelf();
     }
-    
-    async setup(){
+
+    async setup() {
         const __filename = fileURLToPath(import.meta.url);
         const __dirname = path.dirname(__filename);
-        dotenv.config({path: __dirname + '/.env'});
 
-        const dbService : DbService = this.container.get(DbService);
-        const server: InversifyExpressServer = new InversifyExpressServer(this.container);
-        
+        dotenv.config({ path: __dirname + "/.env" });
+
+        const dbService: DbService = this.container.get(DbService);
+        const server: InversifyExpressServer = new InversifyExpressServer(
+            this.container
+        );
+
         // Tests connection
         const conn = await dbService.db.connect();
         conn.release();
-        
+
         server.setConfig((app) => {
             app.use(express.json());
         });
@@ -54,4 +62,3 @@ export default class App {
     }
 }
 new App();
-
