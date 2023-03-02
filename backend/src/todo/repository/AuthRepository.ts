@@ -1,6 +1,4 @@
 import { inject, injectable } from "inversify";
-import pg from "pg";
-import { STATUS_CODE } from "../../constants/httpConstants.js";
 import DbService from "../../database/db.js";
 import Account from "../../database/models/Account.js";
 import { PgErrorMap } from "../../database/types.js";
@@ -19,7 +17,7 @@ export default class AuthRepository {
         hashedPassword: string,
         salt: string
     ): Promise<number> {
-        const errorMap : PgErrorMap = new Map([
+        const errorMap: PgErrorMap = new Map([
             ["23505", "Email already used by another account"],
         ]);
         const { rows } = await this.db.query(
@@ -42,19 +40,19 @@ export default class AuthRepository {
         return rows[0] as Account;
     }
 
-    async getUserById(userId: number): Promise<Account> {
+    async getUserById(accountid: number): Promise<Account> {
         const { rows } = await this.db.query(
             `SELECT * FROM account WHERE id = $1`,
-            [userId]
+            [accountid]
         );
 
         return rows[0] as Account;
     }
 
-    async grantAdminPrivilege(userId: number): Promise<number> {
+    async grantAdminPrivilege(accountid: number): Promise<number> {
         const { rows } = await this.db.query(
             `UPDATE account SET isadmin = true WHERE id = $1 RETURNING id`,
-            [userId]
+            [accountid]
         );
         return rows[0].id;
     }

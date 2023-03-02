@@ -28,8 +28,8 @@ export default class App {
     bindService(): void {
         this.container.bind(DbService).toSelf();
 
-        this.container.bind(TodoRepository).toSelf();
         this.container.bind(AuthRepository).toSelf();
+        this.container.bind(TodoRepository).toSelf();
         this.container.bind(TodoService).toSelf();
         this.container.bind(AuthService).toSelf();
     }

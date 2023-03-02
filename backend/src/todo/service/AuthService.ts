@@ -20,19 +20,19 @@ export default class AuthService {
             signupDto.password
         );
 
-        const id : number = await this.authRepository.insertUser(
+        const id: number = await this.authRepository.insertUser(
             signupDto.email,
             signupDto.username,
             hashedPassword,
             salt
         );
 
-        return jwt.sign({ uid : id }, SECRET.PRIVATE_KEY, {
+        return jwt.sign({ uid: id }, SECRET.PRIVATE_KEY, {
             expiresIn: "1d",
         });
     }
-    
-    async login(loginDTO : LoginDTO): Promise<string> {
+
+    async login(loginDTO: LoginDTO): Promise<string> {
         // Authenticate them here by checking if their input = hash
         const user: Account = await this.authRepository.getUserByEmail(loginDTO.email);
 
@@ -41,7 +41,7 @@ export default class AuthService {
             throw new InvalidInputException("Invalid login credentials");
 
         return jwt.sign({
-            uid : user.id
+            uid: user.id
         }, SECRET.PRIVATE_KEY, {
             expiresIn: "1d",
         });

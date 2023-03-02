@@ -1,7 +1,8 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { injectable } from "inversify";
 import pg from "pg";
 import DatabaseException from "../exceptions/DatabaseException.js";
-import { PgErrorCallback, PgErrorMap } from "./types.js";
+import { PgErrorMap } from "./types.js";
 @injectable()
 export default class DbService {
     readonly pool: pg.Pool;
@@ -23,12 +24,11 @@ export default class DbService {
         try {
             return await this.pool.query(query, values);
         } catch (err) {
-            console.log(errorMap.has(err.code));
-            if (err instanceof pg.DatabaseError && errorMap.has(err.code)) {
+            if (errorMap && err instanceof pg.DatabaseError && errorMap.has(err.code)) {
                 const pgError: string = errorMap.get(err.code);
                 throw new DatabaseException(pgError);
             } else if (err instanceof pg.DatabaseError) {
-                throw new Error("Unexpected db error : " + err.detail);
+                throw new Error(err.detail);
             }
         }
     }

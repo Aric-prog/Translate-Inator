@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { inject } from "inversify";
 import { controller, httpPost } from "inversify-express-utils";
 
-import { STATUS_CODE } from "../../constants/httpConstants.js";
+import { STATUS_CODE } from "../../constants/HttpConstants.js";
 import ValidateRequest from "../../middleware/ValidateRequest.js";
 import LoginDTO from "../dto/LoginDTO.js";
 import SignUpDTO from "../dto/SignUpDTO.js";
@@ -20,7 +20,7 @@ export default class AuthController {
         const response = await this.authService.signUp(req.body as SignUpDTO);
         return res.status(STATUS_CODE.OK).json(response);
     }
-    
+
     @httpPost("/login", ValidateRequest.using(LoginDTO.validator))
     async login(req: Request, res: Response) {
         const response = await this.authService.login(req.body as LoginDTO);
