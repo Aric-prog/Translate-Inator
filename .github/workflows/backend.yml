@@ -1,28 +1,36 @@
-name: Backend
-
+name: Backend 
 on:
   push:
-    branches: [ "main", "staging" ]
+    branches:
+      - main
+      - staging
     paths:
-    - 'backend/**'
+      - backend/**
+      - .github/workflows/backend.yml
   pull_request:
-    branches: [ "main", "staging" ]
+    branches:
+      - main
+      - staging
     paths:
-    - 'backend/**'
-
+      - backend/**
+      - .github/workflows/backend.yml
 jobs:
   build:
     runs-on: ubuntu-latest
-    
+    defaults:
+      run:
+        working-directory: ./backend
     steps:
-    - uses: actions/checkout@v3
-    - name : Setup node 
-      uses: actions/setup-node@v3.6.0
-      with: 
-        node-version: 18.4.2
-    - run: npm ci
-    - run: npm run build
-    - run: npm test
-    
-    - name: Build the Docker image
-      run: docker build ./backend --file Dockerfile --tag backend:$(date +%s)
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3.6.0
+        with:
+          node-version: 18
+      - name: Build node
+        run: |
+          npm ci
+          npm run build
+
+      - name: Test node
+        run: npm test
+      - name: Build the Docker image
+        run: docker build . --file Dockerfile --tag backend:$(date +%s)

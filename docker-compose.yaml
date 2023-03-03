@@ -3,15 +3,20 @@ version: "3"
 services:
   db:
     image: postgres:15.2-alpine
+    container_name: ${POSTGRES_CONTAINER}
     volumes:
       - ./postgres_data/psql:/var/lib/postgresql/data
+      - ./backend/src/database/scripts/create_tables.sql:/docker-entrypoint-initdb.d/create_tables.sql
     ports:
-      - "5432:5432"
+      - "${POSTGRES_PORT}:${POSTGRES_PORT}"
     environment:
-      POSTGRES_DB: video_db
-      POSTGRES_USER: root
-      POSTGRES_PASSWORD: qwerty
+      POSTGRES_DB: ${POSTGRES_DATABASE}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      
   backend:
     build: ./backend
     ports: 
       - "8000:8000"
+    depends_on:
+      - db
