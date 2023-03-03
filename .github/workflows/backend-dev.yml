@@ -1,11 +1,11 @@
-name: Backend staging build
+name: Backend dev build
 on:
   push:
     branches:
-      - staging
+      - dev
     paths:
       - backend/**
-      - .github/workflows/backend-staging.yml
+      - .github/workflows/backend-dev.yml
 
 jobs:
   build:
@@ -20,7 +20,7 @@ jobs:
           node-version: 18
 
       - name: Rename env variable
-        run: mv .env.development .env
+        run: mv .env.dev .env
       - name: Build node
         run: |
           npm ci
