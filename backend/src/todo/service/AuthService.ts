@@ -19,7 +19,7 @@ export default class AuthService {
         const [hashedPassword, salt] = this.createNewPasswordHash(
             signupDto.password
         );
-
+        console.log(hashedPassword);
         const id: number = await this.authRepository.insertUser(
             signupDto.email,
             signupDto.username,
@@ -35,9 +35,8 @@ export default class AuthService {
     async login(loginDTO: LoginDTO): Promise<string> {
         // Authenticate them here by checking if their input = hash
         const user: Account = await this.authRepository.getUserByEmail(loginDTO.email);
-
         if (!user) throw new InvalidInputException("Invalid login credentials");
-        if (this.createPasswordHash(loginDTO.password, user.salt) != user.hashedPassword)
+        if (this.createPasswordHash(loginDTO.password, user.salt) !== user.hashedpassword)
             throw new InvalidInputException("Invalid login credentials");
 
         return jwt.sign({

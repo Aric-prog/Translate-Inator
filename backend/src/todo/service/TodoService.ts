@@ -12,8 +12,7 @@ export default class TodoService {
     }
 
     async createTodo(accountId: number, createTodoDTO: CreateTodoDTO): Promise<Todo> {
-        const id: number = await this.todoRepository.createNewTodo(accountId, createTodoDTO.entry);
-        const todo: Todo = await this.todoRepository.getTodoById(id);
+        const todo: Todo = await this.todoRepository.createNewTodo(accountId, createTodoDTO.entry);
         return todo;
     }
 
@@ -37,7 +36,7 @@ export default class TodoService {
     async toggleTodo(accountId: number, todoId: number): Promise<Todo> {
         if (!this.userOwnsTodo(accountId, todoId)) return;
         const todo: Todo = await this.todoRepository.getTodoById(todoId);
-        return await this.todoRepository.updateTodoStatus(todoId, !todo.isDone);
+        return await this.todoRepository.updateTodoStatus(todoId, !todo.isdone);
     }
 
 }

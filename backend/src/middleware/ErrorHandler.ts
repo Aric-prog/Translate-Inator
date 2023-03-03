@@ -10,9 +10,12 @@ export const errorHandler = (
     res: Response,
     next: NextFunction
 ) => {
+    console.log(err);
     if (err instanceof ValidationException)
         return res.status(err.statusCode).json(err.errors);
-    else if (err instanceof NotFoundException || err instanceof DatabaseException)
+    else if (err instanceof NotFoundException
+        || err instanceof InvalidInputException
+        || err instanceof DatabaseException)
         return res.status(err.statusCode).json({ message: err.message });
     return res.status(500).json("Unexpected server side error");
 };

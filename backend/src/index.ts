@@ -39,7 +39,6 @@ export default class App {
         const __dirname = path.dirname(__filename);
 
         dotenv.config({ path: __dirname + "/.env" });
-
         const server: InversifyExpressServer = new InversifyExpressServer(
             this.container
         );

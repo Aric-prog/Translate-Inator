@@ -10,14 +10,15 @@ export default class TodoRepository {
         this.db = dbService;
     }
 
-    async createNewTodo(accountid: number, entry: string): Promise<number> {
+    async createNewTodo(accountid: number, entry: string): Promise<Todo> {
         const { rows } = await this.db.query(
             `
             INSERT INTO todo(accountid, body, isdone) 
-            VALUES($1, $2, $3)`,
+            VALUES($1, $2, $3)
+            RETURNING *`,
             [accountid, entry, false]
         );
-        return rows[0].id;
+        return rows[0] as Todo;
     }
 
     async getTodoByUser(accountid: number): Promise<Todo[]> {

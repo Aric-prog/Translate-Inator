@@ -18,12 +18,12 @@ export default class AuthController {
     @httpPost("/signup", ValidateRequest.using(SignUpDTO.validator))
     async signUp(req: Request, res: Response) {
         const response = await this.authService.signUp(req.body as SignUpDTO);
-        return res.status(STATUS_CODE.OK).json(response);
+        return res.status(STATUS_CODE.OK).json({ token: response });
     }
 
     @httpPost("/login", ValidateRequest.using(LoginDTO.validator))
     async login(req: Request, res: Response) {
         const response = await this.authService.login(req.body as LoginDTO);
-        return res.status(STATUS_CODE.OK).json(response);
+        return res.status(STATUS_CODE.OK).json({ token: response });
     }
 }
