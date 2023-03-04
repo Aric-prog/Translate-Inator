@@ -5,8 +5,3 @@ steps:
     args:
       - "build"
       - "--no-cache"
-  - name: docker/compose
-    id: Push
-    args:
-      - ["--env-file", "./.backend/.env.development"]
-      - ["up", "-d"]
