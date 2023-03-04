@@ -1,4 +1,4 @@
-name: Frontend dev build
+name: Frontend dev
 on:
   push:
     branches:
@@ -8,6 +8,24 @@ on:
       - .github/workflows/frontend-dev.yml
 
 jobs:
+  production-init:
+    if: contains(github.ref, "main")
+    runs-on: ubuntu-latest
+    outputs:
+      env-name: ${{steps.env.outputs.env-name}}
+    steps:
+      - id: env
+        run: echo "env-name=production" >> $GITHUB_OUTPUT
+
+  dev-init:
+    if: contains(github.ref, "development")
+    runs-on: ubuntu-latest
+    outputs:
+      env-name: "development"
+    steps:
+      - id: env
+        run: echo "env-name=development" >> $GITHUB_OUTPUT
+
   build:
     runs-on: ubuntu-latest
     defaults:
@@ -20,7 +38,7 @@ jobs:
           node-version: 18
 
       - name: Renaming .env file
-        run: mv .env.dev .env
+        run: mv .env.$ENVIRONMENT-NAME .env
       - name: Build node
         run: |
           npm ci
