@@ -1,60 +1,21 @@
-name: Backend production
+name: Backend 
+
 on:
   push:
     paths:
       - backend/**
       - .github/workflows/backend.yml
+      - .github/workflows/backend-template.yml
 
 jobs:
-  production-init:
-    if: contains(github.ref, "main")
-    runs-on: ubuntu-latest
-    outputs:
-      env-name: ${{steps.env.outputs.env-name}}
-    steps:
-      - id: env
-        run: echo "env-name=production" >> $GITHUB_OUTPUT
-
-  dev-init:
-    if: contains(github.ref, "development")
-    runs-on: ubuntu-latest
-    outputs:
-      env-name: "development"
-    steps:
-      - id: env
-        run: echo "env-name=development" >> $GITHUB_OUTPUT
-
-  build:
-    runs-on: ubuntu-latest
-    needs: init
-    defaults:
-      run:
-        working-directory: ./backend
-    steps:
-      - env:
-          ENVIRONMENT-NAME: ${{needs.init.outputs.env-name}}
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3.6.0
-        with:
-          node-version: 18
-
-      - name: Rename env variable
-        run: mv .env.$ENVIRONMENT-NAME .env
-      - name: Build node
-        run: |
-          npm ci
-          npm run build
-
-      - name: Test node
-        run: npm test
-      - name: Build the Docker image
-        run: docker build . --file Dockerfile --tag backend:$ENVIRONMENT-NAME
-
-  deployment:
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./backend
-    if: contains(github.ref, "main")
-    steps:
-      - run: echo "placeholder"
+  development:
+    if: contains(github.ref, 'development')
+    uses : ./.github/workflows/backend-template.yml
+    with:
+      environment: development
+    
+  production:
+    if: contains(github.ref, 'main')
+    uses : ./.github/workflows/backend-template.yml
+    with:
+      environment: production

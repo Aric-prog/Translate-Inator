@@ -1,50 +1,22 @@
-name: Frontend dev
+name: Frontend 
+
 on:
   push:
-    branches:
-      - dev
     paths:
       - frontend/**
-      - .github/workflows/frontend-dev.yml
+      - .github/workflows/frontend.yml
+      - .github/workflows/frontend-template.yml
+
 
 jobs:
-  production-init:
-    if: contains(github.ref, "main")
-    runs-on: ubuntu-latest
-    outputs:
-      env-name: ${{steps.env.outputs.env-name}}
-    steps:
-      - id: env
-        run: echo "env-name=production" >> $GITHUB_OUTPUT
-
-  dev-init:
-    if: contains(github.ref, "development")
-    runs-on: ubuntu-latest
-    outputs:
-      env-name: "development"
-    steps:
-      - id: env
-        run: echo "env-name=development" >> $GITHUB_OUTPUT
-
-  build:
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./frontend
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3.6.0
-        with:
-          node-version: 18
-
-      - name: Renaming .env file
-        run: mv .env.$ENVIRONMENT-NAME .env
-      - name: Build node
-        run: |
-          npm ci
-          npm run build
-
-      - name: Test node
-        run: npm test
-      - name: Build the Docker image
-        run: docker build . --file Dockerfile --tag frontend:$(date +%s)
+  development:
+    if: contains(github.ref, 'development')
+    uses : ./.github/workflows/frontend-template.yml
+    with:
+      environment: development
+    
+  production:
+    if: contains(github.ref, 'main')
+    uses : ./.github/workflows/frontend-template.yml
+    with:
+      environment: production
