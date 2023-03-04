@@ -19,7 +19,7 @@ jobs:
         with:
           node-version: 18
 
-      - name: Rename env variable
+      - name: Renaming .env file
         run: mv .env.dev .env
       - name: Build node
         run: |
