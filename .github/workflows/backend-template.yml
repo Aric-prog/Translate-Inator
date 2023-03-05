@@ -30,6 +30,15 @@ jobs:
 
       - name: Test node
         run: npm run test
+
+  docker:
+    runs-on: ubuntu-latest
+    environment:
+      name: ${{inputs.environment}}
+    defaults:
+      run:
+        working-directory: ./backend
+    steps:
       - name: Build the Docker image
         run: docker build . --file Dockerfile --tag backend:${{ vars.ENVIRONMENT_NAME }}
 

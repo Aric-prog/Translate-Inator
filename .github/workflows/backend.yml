@@ -9,13 +9,13 @@ on:
 
 jobs:
   development:
-    if: contains(github.ref, 'development')
+    # if: contains(github.ref, 'development')
     uses: ./.github/workflows/backend-template.yml
     with:
       environment: development
 
   production:
-    if: contains(github.ref, 'main')
+    # if: contains(github.ref, 'main')
     uses: ./.github/workflows/backend-template.yml
     with:
       environment: production
