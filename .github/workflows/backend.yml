@@ -1,4 +1,4 @@
-name: Backend 
+name: Backend
 
 on:
   push:
@@ -10,12 +10,12 @@ on:
 jobs:
   development:
     if: contains(github.ref, 'development')
-    uses : ./.github/workflows/backend-template.yml
+    uses: ./.github/workflows/backend-template.yml
     with:
       environment: development
-    
+
   production:
     if: contains(github.ref, 'main')
-    uses : ./.github/workflows/backend-template.yml
+    uses: ./.github/workflows/backend-template.yml
     with:
       environment: production

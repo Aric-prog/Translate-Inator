@@ -1,12 +1,12 @@
 name: Backend
 
 on:
-  workflow_call: 
+  workflow_call:
     inputs:
       environment:
         required: true
         type: string
-    
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -29,16 +29,23 @@ jobs:
           npm run build
 
       - name: Test node
-        run: npm test
+        run: npm run test
       - name: Build the Docker image
         run: docker build . --file Dockerfile --tag backend:${{ vars.ENVIRONMENT_NAME }}
 
   deployment:
     needs: build
+    environment:
+      name: ${{inputs.environment}}
     runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: ./backend
     if: contains(github.ref, 'main')
     steps:
-      - run: echo "placeholder"
+      - uses: "actions/checkout@v3"
+      - id: "auth"
+        name: Authenticate to GCP
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: ${{ secrets.GCP_SERVICE_ACCOUNT_JSON }}
