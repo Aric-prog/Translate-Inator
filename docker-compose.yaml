@@ -1,14 +1,15 @@
 version: "3"
 services:
   db:
+    container_name: todo-db
     image: postgres:15.2-alpine
     env_file: ./backend/.env
-    container_name: todo-db
     volumes:
       - ./postgres_data/psql:/var/lib/postgresql/data
       - ./backend/src/database/scripts/create_tables.sql:/docker-entrypoint-initdb.d/create_tables.sql
       
   backend:
+    container_name: todo-backend
     build: ./backend
     ports: 
       - "8000:8000"
@@ -20,23 +21,26 @@ services:
     ports: 
       - "4200:4200"
     volumes:
-      - shared-volume:/frontend/dist/frontend
+      - ./data/frontend:/frontend/dist/frontend
 
   nginx:
+    container_name: todo-nginx
     image: nginx:latest
     ports:
       - "80:80"
       - "443:443"
     volumes:
-      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
       - ./etc/letsencrypt:/etc/letsencrypt
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
       - ./data/certbot:/var/www/certbot
       - shared-volume:/html
 
   certbot:
     image: certbot/certbot
+    depends_on:
+      - nginx
     volumes:
-    - ./data/certbot/conf:/etc/letsencrypt
+    - ./etc/letsencrypt:/etc/letsencrypt
     - ./data/certbot:/var/www/certbot
     
 volumes:

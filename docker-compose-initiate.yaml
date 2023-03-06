@@ -17,7 +17,7 @@ services:
     command: >- 
              certonly --reinstall --webroot --webroot-path=/var/www/certbot
              --email hernandoaric@gmail.com --agree-tos --no-eff-email
-             -d todo.arichernando.com
+             -d todo.arichernando.com -d www.todo.arichernando.com
     volumes:
       - ./etc/letsencrypt:/etc/letsencrypt
       - ./data/certbot:/var/www/certbot
