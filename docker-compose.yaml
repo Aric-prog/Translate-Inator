@@ -1,9 +1,8 @@
-# Strictly for dev environment  
 version: "3"
 services:
   db:
     image: postgres:15.2-alpine
-    env_file: ./backend/.env.development
+    env_file: ./backend/.env
     container_name: todo-db
     volumes:
       - ./postgres_data/psql:/var/lib/postgresql/data
