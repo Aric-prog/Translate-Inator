@@ -2,3 +2,4 @@
 /postgres_data/*
 /etc/*
 /data/*
+.env
