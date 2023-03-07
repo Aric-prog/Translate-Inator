@@ -13,7 +13,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     environment:
-      name: ${{inputs.environment}}
+      name: ${{ inputs.environment }}
     defaults:
       run:
         working-directory: ./frontend
@@ -36,7 +36,7 @@ jobs:
   docker:
     runs-on: ubuntu-latest
     environment:
-      name: ${{inputs.environment}}
+      name: ${{ inputs.environment }}
     defaults:
       run:
         working-directory: ./frontend
@@ -47,7 +47,7 @@ jobs:
   deployment:
     needs: build
     environment:
-      name: ${{inputs.environment}}
+      name: ${{ inputs.environment }}
     runs-on: ubuntu-latest
     defaults:
       run:
