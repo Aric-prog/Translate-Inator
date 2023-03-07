@@ -1,4 +1,6 @@
-name: Backend
+# This name is a workaround used because github actions does not hide reusable workflows.
+# With _ prepend the workflow will be pushed to the very bottom in the UI.
+name: _backend-template
 
 on:
   workflow_call:
