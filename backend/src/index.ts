@@ -4,10 +4,6 @@ import { Container } from "inversify";
 import { InversifyExpressServer } from "inversify-express-utils";
 import { errorHandler } from "./middleware/ErrorHandler.js";
 
-import * as dotenv from "dotenv";
-import { fileURLToPath } from "url";
-import path from "path";
-
 import DbService from "./database/db.js";
 
 import AuthRepository from "./todo/repository/AuthRepository.js";
@@ -38,10 +34,6 @@ export default class App {
     }
 
     async setup() {
-        const __filename = fileURLToPath(import.meta.url);
-        const __dirname = path.dirname(__filename);
-
-        dotenv.config({ path: __dirname + "/.env" });
         const server: InversifyExpressServer = new InversifyExpressServer(
             this.container
         );

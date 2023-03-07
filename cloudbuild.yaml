@@ -1,7 +1,0 @@
-timeout: 1200s
-steps:
-  - name: docker/compose
-    id: Build
-    args:
-      - "build"
-      - "--no-cache"

@@ -6,18 +6,21 @@ services:
     ports:
       - 80:80
     volumes:
-      - ./nginx/initiate-nginx.conf:/etc/nginx/conf.d/default.conf
+      - ./nginx/initiate-nginx.conf:/etc/nginx/templates/default.conf.template
       - ./etc/letsencrypt:/etc/letsencrypt
       - ./data/certbot:/var/www/certbot
+    environment:
+      - NGINX_DOMAIN=${DOMAIN}
+
   certbot:
     container_name: certbot
     image: certbot/certbot:latest
+    environment:
+      - DOMAIN=${DOMAIN}
+      - DOMAIN_EMAIL=${DOMAIN_EMAIL}
     depends_on:
       - nginx
-    command: >- 
-             certonly --reinstall --webroot --webroot-path=/var/www/certbot
-             --email hernandoaric@gmail.com --agree-tos --no-eff-email
-             -d todo.arichernando.com -d www.todo.arichernando.com
+    entrypoint: /bin/sh -c "/scripts/setup.sh"
     volumes:
       - ./etc/letsencrypt:/etc/letsencrypt
       - ./data/certbot:/var/www/certbot
