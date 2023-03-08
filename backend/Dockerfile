@@ -1,7 +1,7 @@
 FROM node:lts-alpine as build
 WORKDIR /backend
-COPY package.json . 
-RUN npm install --production
+COPY *.json . 
+RUN npm ci --omit=dev
 COPY . .
 RUN npm run build
 
