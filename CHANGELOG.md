@@ -7,7 +7,9 @@ Features:
     - HTTPS for nginx running on local -> [755af72](https://github.com/Aric-prog/VideoTranslatorAI/commit/755af72)
     - Frontend service now serves their own files instead of needing nginx -> [9705ca3](https://github.com/Aric-prog/VideoTranslatorAI/commit/9705ca3)
     - Docker compose start up only uses a single env file for all services -> [a4fc35b](https://github.com/Aric-prog/VideoTranslatorAI/commit/a4fc35b)
+    -
 
 Fix: 
     - Fixed backend import error due to no package.json file -> [2ffb081](https://github.com/Aric-prog/VideoTranslatorAI/commit/2ffb081)
     - Fixed nginx being unable to find SSL files -> [bd3cd74](https://github.com/Aric-prog/VideoTranslatorAI/commit/bd3cd74)
+    - CI/CD for production can be triggered from other branch -> [f8e1312](https://github.com/Aric-prog/VideoTranslatorAI/commit/f8e1312)
