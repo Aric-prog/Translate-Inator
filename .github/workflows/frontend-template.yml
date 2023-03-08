@@ -25,7 +25,7 @@ jobs:
 
       - name: Initialize env file
         run: |
-          echo "${{ secrets.ENV_FILE}}" > .env
+          echo "${{ secrets.ENV_FILE }}" > .env
       - name: Build node
         run: |
           npm ci
@@ -33,19 +33,17 @@ jobs:
 
       - name: Test node
         run: npm run test
-
   docker:
     runs-on: ubuntu-latest
     environment:
       name: ${{ inputs.environment }}
     defaults:
       run:
-        working-directory: ./frontend
+        working-directory: ./backend
     steps:
       - uses: actions/checkout@v3
       - name: Build the Docker image
-        run: docker build . --file Dockerfile --tag frontend:${{ vars.ENVIRONMENT_NAME }}
-
+        run: docker build . --file Dockerfile --tag backend:${{ vars.ENVIRONMENT_NAME }}
   deployment:
     needs: build
     environment:
