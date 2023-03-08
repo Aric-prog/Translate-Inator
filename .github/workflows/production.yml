@@ -17,3 +17,32 @@ jobs:
     uses: ./.github/workflows/frontend-template.yml
     with:
       environment: production
+
+  deployment:
+    needs: [backend, frontend]
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+    steps:
+      - name: Initialize env file
+        env:
+          ENV_FILE: ${{ secrets.ENV_FILE }}
+        run: |
+          echo "$ENV_FILE" | base64 --decode > .env
+      - uses: "actions/checkout@v3"
+      - id: "auth"
+        name: Authenticate to GCP
+        uses: google-github-actions/auth@v1
+        env:
+          CREDS: ${{ secrets.GCP_SERVICE_ACCOUNT_JSON }}
+        with:
+          credentials_json: ${{ secrets.GCP_SERVICE_ACCOUNT_JSON }}
+
+      - name: Setup cloud sdk
+        uses: google-github-actions/setup-gcloud@v1
+
+      - name: SSH into GCE and running docker compose
+        run: |
+          gcloud compute ssh todo-gce --zone=us-australia-southeast2-b \
+            --command="git clone https://github.com/Aric-prog/VideoTranslatorAI && cd '$(basename '$_' .git)' &&\
+            docker-compose up -d"
