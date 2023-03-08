@@ -1,7 +1,7 @@
 FROM node:lts-alpine as build
 WORKDIR /frontend
 COPY package.json . 
-RUN npm install --omit=dev
+RUN npm install
 COPY . .
 RUN npm run build
 EXPOSE 4200
