@@ -8,7 +8,7 @@ if [[ "${DOMAIN}" == "localhost" ]]; then
         -subj '/CN=localhost' -extensions EXT -config <( \
         printf "[dn]\nCN=localhost\n[req]\ndistinguished_name = dn\n[EXT]\nsubjectAltName=DNS:localhost\nkeyUsage=digitalSignature\nextendedKeyUsage=serverAuth")
 else
-    certonly --reinstall --webroot --webroot-path=/var/www/certbot \
+    certbot certonly --reinstall --webroot --webroot-path=/var/www/certbot \
         --email ${DOMAIN_EMAIL} --agree-tos --no-eff-email \
         -d $DOMAIN -d www.$DOMAIN
 fi

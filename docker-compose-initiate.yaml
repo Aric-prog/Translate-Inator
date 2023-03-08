@@ -23,4 +23,5 @@ services:
     entrypoint: /bin/sh -c "/scripts/setup.sh"
     volumes:
       - ./etc/letsencrypt:/etc/letsencrypt
+      - ./nginx/setup/setup.sh:/scripts/setup.sh
       - ./data/certbot:/var/www/certbot
