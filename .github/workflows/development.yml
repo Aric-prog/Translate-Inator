@@ -1,0 +1,21 @@
+name: Development
+
+on:
+  push:
+    paths:
+      - frontend/**
+      - backend/**
+      - .github/workflows/development.yml
+      - .github/workflows/frontend-template.yml
+      - .github/workflows/backend-template.yml
+
+jobs:
+  backend:
+    uses: ./.github/workflows/backend-template.yml
+    with:
+      environment: development
+
+  frontend:
+    uses: ./.github/workflows/frontend-template.yml
+    with:
+      environment: development

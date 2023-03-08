@@ -1,0 +1,19 @@
+name: Production
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+jobs:
+  backend:
+    uses: ./.github/workflows/backend-template.yml
+    with:
+      environment: production
+
+  frontend:
+    uses: ./.github/workflows/frontend-template.yml
+    with:
+      environment: production
