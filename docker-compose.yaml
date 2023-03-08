@@ -1,8 +1,9 @@
+# Strictly for dev environment  
 version: "3"
-
 services:
   db:
     image: postgres:15.2-alpine
+<<<<<<< HEAD
     container_name: ${POSTGRES_CONTAINER}
     volumes:
       - ./postgres_data/psql:/var/lib/postgresql/data
@@ -13,10 +14,28 @@ services:
       POSTGRES_DB: ${POSTGRES_DATABASE}
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+=======
+    env_file: ./backend/.env.development
+    container_name: todo-db
+    volumes:
+      - ./postgres_data/psql:/var/lib/postgresql/data
+      - ./backend/src/database/scripts/create_tables.sql:/docker-entrypoint-initdb.d/create_tables.sql
+>>>>>>> development
       
   backend:
     build: ./backend
     ports: 
       - "8000:8000"
     depends_on:
+<<<<<<< HEAD
       - db
+=======
+      - db
+
+  frontend:
+    build: ./frontend
+    ports: 
+      - "80:80"
+    depends_on:
+      - backend
+>>>>>>> development

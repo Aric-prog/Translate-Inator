@@ -1,0 +1,44 @@
+name: Backend
+
+on:
+  workflow_call: 
+    inputs:
+      environment:
+        required: true
+        type: string
+    
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    environment:
+      name: ${{inputs.environment}}
+    defaults:
+      run:
+        working-directory: ./backend
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3.6.0
+        with:
+          node-version: 18
+
+      - name: Rename env variable
+        run: mv .env.${{ vars.ENVIRONMENT_NAME }} .env
+      - name: Build node
+        run: |
+          npm ci
+          npm run build
+
+      - name: Test node
+        run: npm test
+      - name: Build the Docker image
+        run: docker build . --file Dockerfile --tag backend:${{ vars.ENVIRONMENT_NAME }}
+
+  # deployment:
+  #   needs: build
+  #   runs-on: ubuntu-latest
+  #   defaults:
+  #     run:
+  #       working-directory: ./backend
+  #   if: contains(github.ref, 'main')
+  #   steps:
+  #     - run: echo "placeholder"
