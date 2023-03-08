@@ -1,7 +1,7 @@
 name: Frontend
 
 on:
-  workflow_call: 
+  workflow_call:
     inputs:
       environment:
         required: true
@@ -11,7 +11,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     environment:
-      name: ${{inputs.environment}}
+      name: ${{ inputs.environment }}
     defaults:
       run:
         working-directory: ./frontend
@@ -21,14 +21,15 @@ jobs:
         with:
           node-version: 18
 
-      - name: Renaming .env file
-        run: mv .env.${{ vars.ENVIRONMENT_NAME }} .env
+      - name: Initialize env file
+        run: |
+          echo "${{ secrets.ENV_FILE}}" > .env
       - name: Build node
         run: |
           npm ci
           npm run build
 
       - name: Test node
-        run: npm test
+        run: npm run test
       - name: Build the Docker image
         run: docker build . --file Dockerfile --tag frontend:${{ vars.ENVIRONMENT_NAME }}
