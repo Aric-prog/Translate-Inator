@@ -2,13 +2,9 @@ name: Development
 
 on:
   push:
-    paths:
-      - frontend/**
-      - backend/**
-      - .github/workflows/development.yml
-      - .github/workflows/frontend-template.yml
-      - .github/workflows/backend-template.yml
     branches:
+      - "*/*" # Matches every branch that includes a single /
+      - "development"
       - "!main"
 
 jobs:
