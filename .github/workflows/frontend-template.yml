@@ -1,4 +1,6 @@
-name: Frontend
+# This name is a workaround used because github actions does not hide reusable workflows.
+# With _ prepend the workflow will be pushed to the very bottom in the UI.
+name: _frontend-template
 
 on:
   workflow_call:
@@ -31,5 +33,32 @@ jobs:
 
       - name: Test node
         run: npm run test
+
+  docker:
+    runs-on: ubuntu-latest
+    environment:
+      name: ${{ inputs.environment }}
+    defaults:
+      run:
+        working-directory: ./frontend
+    steps:
+      - uses: actions/checkout@v3
       - name: Build the Docker image
         run: docker build . --file Dockerfile --tag frontend:${{ vars.ENVIRONMENT_NAME }}
+
+  deployment:
+    needs: build
+    environment:
+      name: ${{ inputs.environment }}
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./frontend
+    if: contains(github.ref, 'main')
+    steps:
+      - uses: "actions/checkout@v3"
+      - id: "auth"
+        name: Authenticate to GCP
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: ${{ secrets.GCP_SERVICE_ACCOUNT_JSON }}

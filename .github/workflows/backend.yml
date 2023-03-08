@@ -1,0 +1,19 @@
+name: Backend
+
+on:
+  push:
+    paths:
+      - backend/**
+      - .github/workflows/backend.yml
+      - .github/workflows/backend-template.yml
+
+jobs:
+  development:
+    uses: ./.github/workflows/backend-template.yml
+    with:
+      environment: development
+
+  production:
+    uses: ./.github/workflows/backend-template.yml
+    with:
+      environment: production
