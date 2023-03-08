@@ -1,0 +1,19 @@
+name: Development
+
+on:
+  push:
+    branches:
+      - "*/*" # Matches every branch that includes a single /
+      - "development"
+      - "!main"
+
+jobs:
+  backend:
+    uses: ./.github/workflows/backend-template.yml
+    with:
+      environment: development
+
+  frontend:
+    uses: ./.github/workflows/frontend-template.yml
+    with:
+      environment: development

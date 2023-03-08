@@ -1,22 +1,22 @@
 import express from "express";
+import "reflect-metadata";
 import { Container } from "inversify";
 import { InversifyExpressServer } from "inversify-express-utils";
 import { errorHandler } from "./middleware/ErrorHandler.js";
 
 import * as dotenv from "dotenv";
-import { fileURLToPath } from "url";
-import path from "path";
-import "reflect-metadata";
+import DbService from "./database/db.js";
 
 import AuthRepository from "./todo/repository/AuthRepository.js";
 import TodoRepository from "./todo/repository/TodoRepository.js";
 
-import DbService from "./database/db.js";
 import AuthService from "./todo/service/AuthService.js";
 import TodoService from "./todo/service/TodoService.js";
 
 import "./todo/controller/TodoController.js";
 import "./todo/controller/AuthController.js";
+import { fileURLToPath } from "url";
+import path from "path";
 
 export default class App {
     private readonly container: Container;

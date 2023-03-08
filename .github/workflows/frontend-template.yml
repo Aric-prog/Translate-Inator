@@ -1,7 +1,9 @@
-name: Frontend
+# This name is a workaround used because github actions does not hide reusable workflows.
+# With _ prepend the workflow will be pushed to the very bottom in the UI.
+name: _frontend-template
 
 on:
-  workflow_call: 
+  workflow_call:
     inputs:
       environment:
         required: true
@@ -11,7 +13,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     environment:
-      name: ${{inputs.environment}}
+      name: ${{ inputs.environment }}
     defaults:
       run:
         working-directory: ./frontend
@@ -21,14 +23,44 @@ jobs:
         with:
           node-version: 18
 
-      - name: Renaming .env file
-        run: mv .env.${{ vars.ENVIRONMENT_NAME }} .env
+      - name: Initialize env file
+        env:
+          ENV_FILE: ${{ secrets.ENV_FILE }}
+        run: |
+          echo "$ENV_FILE" | base64 --decode > .env
       - name: Build node
         run: |
-          npm ci
+          npm install
           npm run build
 
       - name: Test node
-        run: npm test
+        run: npm run test
+  docker:
+    runs-on: ubuntu-latest
+    environment:
+      name: ${{ inputs.environment }}
+    defaults:
+      run:
+        working-directory: ./backend
+    steps:
+      - uses: actions/checkout@v3
       - name: Build the Docker image
-        run: docker build . --file Dockerfile --tag frontend:${{ vars.ENVIRONMENT_NAME }}
+        run: docker build . --file Dockerfile --tag backend:${{ vars.ENVIRONMENT_NAME }}
+  deployment:
+    needs: build
+    environment:
+      name: ${{ inputs.environment }}
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./frontend
+    if: contains(github.ref, 'main')
+    steps:
+      - uses: "actions/checkout@v3"
+      - id: "auth"
+        name: Authenticate to GCP
+        uses: google-github-actions/auth@v1
+        env:
+          CREDS: ${{ secrets.GCP_SERVICE_ACCOUNT_JSON }}
+        with:
+          credentials_json: ${{ env.CREDS }}
