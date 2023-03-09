@@ -75,10 +75,6 @@ jobs:
           gcloud compute scp .env docker-compose.prod.yaml hernandoaric@todo-translator:~/VideoTranslatorAI/ --zone=australia-southeast2-b --ssh-key-expire-after=2m; \
           gcloud compute scp --recurse nginx hernandoaric@todo-translator:~/VideoTranslatorAI/nginx/ --zone=australia-southeast2-b --ssh-key-expire-after=2m
 
-      - id: "compute-ssh"
-        uses: "google-github-actions/ssh-compute@v0"
-        with:
-          instance_name: "todo-translator"
-          zone: "australia-southeast2-b"
-          ssh_private_key: "${{ secrets.SSH_PRIVATE_KEY }}"
-          command: "cd ~/VideoTranslatorAI && docker-compose -f ./docker-compose.prod.yaml up -d"
+      - name: "SSH into GCE instance and run docker compose"
+        run: |
+          gcloud compute ssh todo-translator --zone=australia-southeast2-b --ssh-key-expire-after=2m --command="bash -i -c 'cd ~/VideoTranslatorAI && docker-compose -f ./docker-compose.prod.yaml up -d'"
