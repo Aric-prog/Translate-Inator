@@ -1,0 +1,27 @@
+version: "3"
+services:
+  nginx:
+    container_name: nginx
+    image: nginx:latest
+    ports:
+      - 80:80
+    volumes:
+      - ./nginx/setup/initiate-nginx.conf:/etc/nginx/templates/default.conf.template
+      - ./etc/letsencrypt:/etc/letsencrypt
+      - ./data/certbot:/var/www/certbot
+    environment:
+      - NGINX_DOMAIN=${DOMAIN}
+
+  certbot:
+    container_name: certbot
+    image: certbot/certbot:latest
+    environment:
+      - DOMAIN=${DOMAIN}
+      - DOMAIN_EMAIL=${DOMAIN_EMAIL}
+    depends_on:
+      - nginx
+    entrypoint: /bin/sh -c "/scripts/setup.sh"
+    volumes:
+      - ./etc/letsencrypt:/etc/letsencrypt
+      - ./nginx/setup/setup.sh:/scripts/setup.sh
+      - ./data/certbot:/var/www/certbot

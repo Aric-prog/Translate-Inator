@@ -17,3 +17,60 @@ jobs:
     uses: ./.github/workflows/frontend-template.yml
     with:
       environment: production
+
+  docker:
+    runs-on: ubuntu-latest
+    needs: [backend, frontend]
+    environment:
+      name: production
+    steps:
+      - uses: actions/checkout@v3
+      - id: "auth"
+        name: Authenticate to GCP
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: ${{ secrets.GCP_SERVICE_ACCOUNT_JSON }}
+
+      - name: Configure GCP container registry
+        run: |
+          gcloud auth configure-docker -q
+
+      - name: Build and pushes the backend Docker image
+        run: |
+          docker build ./backend --tag asia.gcr.io/${{ secrets.PROJECT_ID }}/backend:production
+          docker push asia.gcr.io/${{ secrets.PROJECT_ID }}/backend:production
+
+      - name: Build and pushes the frontend Docker image
+        run: |
+          docker build ./frontend --tag asia.gcr.io/${{ secrets.PROJECT_ID }}/frontend:production
+          docker push asia.gcr.io/${{ secrets.PROJECT_ID }}/frontend:production
+
+  deployment:
+    needs: docker
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+    steps:
+      - uses: "actions/checkout@v3"
+      - id: "auth"
+        name: Authenticate to GCP
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: ${{ secrets.GCP_SERVICE_ACCOUNT_JSON }}
+
+      - name: Setup cloud sdk
+        uses: google-github-actions/setup-gcloud@v1
+
+      - name: Initialize env file
+        env:
+          ENV_FILE: ${{ secrets.ENV_FILE }}
+          PROJECT_ID: ${{ secrets.PROJECT_ID }}
+          GITHUB_SHA: ${{ github.sha }}
+        run: |
+          echo "$ENV_FILE" | base64 --decode > .env && 
+          echo "" >> .env; \
+          echo "GITHUB_SHA=$GITHUB_SHA" >> .env; \
+          echo "PROJECT_ID=$PROJECT_ID" >> .env; \
+          ls -a; \
+          gcloud compute scp .env docker-compose.prod.yaml hernandoaric@todo-gce:~/VideoTranslatorAI/ --zone=australia-southeast2-b --ssh-key-expire-after=2m; \
+          gcloud compute scp --recurse nginx hernandoaric@todo-gce:~/VideoTranslatorAI/nginx/ --zone=australia-southeast2-b --ssh-key-expire-after=2m

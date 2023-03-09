@@ -1,0 +1,64 @@
+version: "3"
+services:
+  db:
+    container_name: ${POSTGRES_CONTAINER_NAME}
+    image: postgres:15.2-alpine
+    volumes:
+      - ./postgres_data/psql:/var/lib/postgresql/data
+      - ./backend/src/database/scripts/create_tables.sql:/docker-entrypoint-initdb.d/create_tables.sql
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_PORT=${POSTGRES_PORT}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_USER=${POSTGRES_USER}
+      
+  backend:
+    container_name: ${BACKEND_CONTAINER_NAME}
+    image: asia.gcr.io/${PROJECT_ID}/backend:production
+    depends_on:
+      - db
+    environment:
+      - PORT=${BACKEND_PORT}
+      - POSTGRES_HOST=${POSTGRES_CONTAINER_NAME}
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_PORT=${POSTGRES_PORT}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - TRANSLATION_API_KEY=${TRANSLATION_API_KEY}
+      - GMAIL_API_KEY=${GMAIL_API_KEY}
+
+  frontend:
+    container_name: ${FRONTEND_CONTAINER_NAME}
+    image: asia.gcr.io/${PROJECT_ID}/frontend:production
+    environment:
+      - PORT=${FRONTEND_PORT}
+      - DOMAIN=${DOMAIN}
+
+  nginx:
+    container_name: todo-nginx
+    image: nginx:latest
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - frontend
+      - backend
+    volumes:
+      - ./etc/letsencrypt:/etc/letsencrypt
+      - ./nginx/nginx.conf:/etc/nginx/templates/default.conf.template
+      - ./data/certbot:/var/www/certbot
+    environment:
+      - NGINX_DOMAIN=${DOMAIN}
+      - NGINX_FRONTEND_HOST=${FRONTEND_CONTAINER_NAME}
+      - NGINX_BACKEND_HOST=${BACKEND_CONTAINER_NAME}
+      - NGINX_FRONTEND_PORT=${FRONTEND_PORT}
+      - NGINX_BACKEND_PORT=${BACKEND_PORT}
+
+  certbot:
+    image: certbot/certbot
+    depends_on:
+      - nginx
+    volumes:
+    - ./etc/letsencrypt:/etc/letsencrypt
+    - ./data/certbot:/var/www/certbot
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"

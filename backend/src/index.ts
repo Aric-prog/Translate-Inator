@@ -51,7 +51,6 @@ export default class App {
         conn.release();
 
         const app = server.build();
-
         app.listen(process.env.PORT, () => {
             console.log("Server is running at PORT : " + process.env.PORT);
         });

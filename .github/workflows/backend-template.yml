@@ -8,7 +8,6 @@ on:
       environment:
         required: true
         type: string
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -23,42 +22,10 @@ jobs:
         with:
           node-version: 18
 
-      - name: Initialize env file
-        run: |
-          echo "${{ secrets.ENV_FILE}}" > .env
       - name: Build node
         run: |
-          npm ci
+          npm install
           npm run build
 
       - name: Test node
         run: npm run test
-
-  docker:
-    runs-on: ubuntu-latest
-    environment:
-      name: ${{ inputs.environment }}
-    defaults:
-      run:
-        working-directory: ./backend
-    steps:
-      - uses: actions/checkout@v3
-      - name: Build the Docker image
-        run: docker build . --file Dockerfile --tag backend:${{ vars.ENVIRONMENT_NAME }}
-
-  deployment:
-    needs: build
-    environment:
-      name: ${{ inputs.environment }}
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./backend
-    if: contains(github.ref, 'main')
-    steps:
-      - uses: "actions/checkout@v3"
-      - id: "auth"
-        name: Authenticate to GCP
-        uses: google-github-actions/auth@v1
-        with:
-          credentials_json: ${{ secrets.GCP_SERVICE_ACCOUNT_JSON }}
