@@ -1,3 +1,5 @@
+# Docker compose file for deploying to production.
+# This file uses image from a container repository instead of building it themselves.
 version: "3"
 services:
   db:

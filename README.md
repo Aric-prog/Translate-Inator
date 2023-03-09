@@ -1,19 +1,11 @@
+# Translate-Inator
 
 ### Installation
-Get node (we're using 18.14.2) : https://nodejs.org/en/
-
-Run these commands if you're on Windows: 
-```bash
-npm install
-npm install -g typescript
-npm install -g ts-node
+Populate values from `.env.template` and rename it to `.env` and run these commands. If you are running on a local environment, change the value of `DOMAIN` to localhost. This will be used by the setup script to create a self-signed certificate on `/etc/letsencrypt`.
+```
+docker-compose -f ./docker-compose.setup.yaml up -d
+docker-compose up -d
 ```
 
-### How to run
-
-Running with nodemon :
-```bash
-npm run dev
-```
-
-
+### Features
+TODO
