@@ -81,4 +81,4 @@ jobs:
           instance_name: "todo-translator"
           zone: "australia-southeast2-b"
           ssh_private_key: "${{ secrets.SSH_PRIVATE_KEY }}"
-          command: "cd ./VideoTranslatorAI && docker-compose -f ./docker-compose.prod.yaml up -d"
+          command: "cd ~/VideoTranslatorAI && docker-compose -f ./docker-compose.prod.yaml up -d"
