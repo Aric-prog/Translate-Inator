@@ -80,4 +80,4 @@ jobs:
           gcloud compute ssh hernandoaric@todo-translator \
           --zone=australia-southeast2-b \
           --ssh-key-expire-after=2m \
-          --command="cd"
+          --command="cd ~/VideoTranslatorAI && docker-compose -f ./docker-compose.prod.yaml up -d"
