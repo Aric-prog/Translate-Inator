@@ -67,7 +67,7 @@ jobs:
           PROJECT_ID: ${{ secrets.PROJECT_ID }}
           GITHUB_SHA: ${{ github.sha }}
         run: |
-          echo "$ENV_FILE" | base64 --decode > .env && 
+          echo "$ENV_FILE" | base64 --decode > .env &&
           echo "" >> .env; \
           echo "GITHUB_SHA=$GITHUB_SHA" >> .env; \
           echo "PROJECT_ID=$PROJECT_ID" >> .env; \
@@ -77,4 +77,7 @@ jobs:
 
       - name: "SSH into GCE instance and run docker compose"
         run: |
-          gcloud compute ssh todo-translator --zone=australia-southeast2-b --ssh-key-expire-after=2m --command="bash -i -c 'cd ~/VideoTranslatorAI && docker-compose -f ./docker-compose.prod.yaml up -d'"
+          gcloud compute ssh hernandoaric@todo-translator \
+          --zone=australia-southeast2-b \
+          --ssh-key-expire-after=2m \
+          --command="cd"
