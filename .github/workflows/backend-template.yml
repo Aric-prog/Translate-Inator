@@ -21,11 +21,6 @@ jobs:
       - uses: actions/setup-node@v3.6.0
         with:
           node-version: 18
-      - name: Initialize env file
-        env:
-          ENV_FILE: ${{ secrets.ENV_FILE }}
-        run: |
-          echo "$ENV_FILE" | base64 --decode > .env
 
       - name: Build node
         run: |
@@ -34,15 +29,3 @@ jobs:
 
       - name: Test node
         run: npm run test
-
-  docker:
-    runs-on: ubuntu-latest
-    environment:
-      name: ${{ inputs.environment }}
-    defaults:
-      run:
-        working-directory: ./backend
-    steps:
-      - uses: actions/checkout@v3
-      - name: Build the Docker image
-        run: docker build . --file Dockerfile --tag backend:${{ vars.ENVIRONMENT_NAME }}

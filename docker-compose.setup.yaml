@@ -6,7 +6,7 @@ services:
     ports:
       - 80:80
     volumes:
-      - ./nginx/initiate-nginx.conf:/etc/nginx/templates/default.conf.template
+      - ./nginx/setup/initiate-nginx.conf:/etc/nginx/templates/default.conf.template
       - ./etc/letsencrypt:/etc/letsencrypt
       - ./data/certbot:/var/www/certbot
     environment:
