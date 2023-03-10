@@ -19,7 +19,7 @@ export default class AuthService {
         const [hashedPassword, salt] = this.createNewPasswordHash(
             signupDto.password
         );
-        console.log(hashedPassword);
+
         const id: number = await this.authRepository.insertUser(
             signupDto.email,
             signupDto.username,

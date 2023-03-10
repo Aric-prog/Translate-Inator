@@ -32,4 +32,8 @@ export default class DbService {
             }
         }
     }
+
+    async testConnection(): Promise<void> {
+        this.pool.connect();
+    }
 }

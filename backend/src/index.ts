@@ -3,8 +3,13 @@ import "reflect-metadata";
 import { Container } from "inversify";
 import { InversifyExpressServer } from "inversify-express-utils";
 import { errorHandler } from "./middleware/ErrorHandler.js";
+import { fileURLToPath } from "url";
+
+import path from "path";
+import * as dotenv from "dotenv";
 
 import DbService from "./database/db.js";
+import TranslateService from "./todo/service/TranslateService.js";
 
 import AuthRepository from "./todo/repository/AuthRepository.js";
 import TodoRepository from "./todo/repository/TodoRepository.js";
@@ -25,8 +30,11 @@ export default class App {
     }
 
     bindService(): void {
+        // External services
         this.container.bind(DbService).toSelf();
+        this.container.bind(TranslateService).toSelf();
 
+        // Internal services
         this.container.bind(AuthRepository).toSelf();
         this.container.bind(TodoRepository).toSelf();
         this.container.bind(TodoService).toSelf();
@@ -34,6 +42,10 @@ export default class App {
     }
 
     async setup() {
+        const __filename = fileURLToPath(import.meta.url);
+        const __dirname = path.dirname(__filename);
+
+        dotenv.config({ path: __dirname + "/.env" });
         const server: InversifyExpressServer = new InversifyExpressServer(
             this.container
         );
@@ -45,14 +57,14 @@ export default class App {
             app.use(errorHandler);
         });
 
-        // Tests connection
+        // Tests db connection
         const dbService: DbService = this.container.get(DbService);
         const conn = await dbService.pool.connect();
         conn.release();
 
         const app = server.build();
-        app.listen(process.env.PORT, () => {
-            console.log("Server is running at PORT : " + process.env.PORT);
+        app.listen(process.env.BACKEND_PORT || 8000, () => {
+            console.log("Server is running at PORT : " + (process.env.BACKEND_PORT || 8000));
         });
     }
 }

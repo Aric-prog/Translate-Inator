@@ -31,7 +31,6 @@ export default class TodoController {
         return res.status(STATUS_CODE.OK).json(response);
     }
 
-
     @httpDelete("/todo", ValidateRequest.using(TodoDTO.validator))
     async deleteTodo(req: Request, res: Response) {
         const response = await this.todoService.deleteUserTodo(res.locals.decodedToken.uid, req.body.todoId);

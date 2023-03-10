@@ -11,7 +11,7 @@ export const authenticated = (
     const header = req.headers.authorization;
 
     if (!header) return res.status(STATUS_CODE.FORBIDDEN).json({ message: "JWT token not provided" });
-    if (header.split(" ")[0] !== "Bearer") return res.status(STATUS_CODE.FORBIDDEN).json({ message: "Malformed JWT token" });
+    if (!(header.split(" ")[0] === "Bearer")) return res.status(STATUS_CODE.FORBIDDEN).json({ message: "Malformed JWT token" });
 
     const token = header.split(" ")[1];
     jwt.verify(token, SECRET.PRIVATE_KEY, (err, decodedToken) => {
