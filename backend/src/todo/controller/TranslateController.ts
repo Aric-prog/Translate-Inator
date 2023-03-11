@@ -20,6 +20,6 @@ export default class TranslateController {
         const response = await this.translateService.translateText(
             req.body as TranslateDTO
         );
-        return res.status(STATUS_CODE.OK).json(response);
+        return res.status(STATUS_CODE.OK).json({ translation: response });
     }
 }

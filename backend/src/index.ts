@@ -17,6 +17,7 @@ import TodoRepository from "./todo/repository/TodoRepository.js";
 import AuthService from "./todo/service/AuthService.js";
 import TodoService from "./todo/service/TodoService.js";
 
+import "./todo/controller/TranslateController.js";
 import "./todo/controller/TodoController.js";
 import "./todo/controller/AuthController.js";
 

@@ -3,6 +3,7 @@
 // For more information: https://material.angular.io/guide/theming
 @use '@angular/material' as mat;
 // Plus imports for other components in your app.
+@import url(https://fonts.googleapis.com/css?family=Patrick+Hand+SC);
 
 // Include the common styles for Angular Material. We include this here so that you only
 // have to load a single css file for Angular Material in your app.
@@ -13,10 +14,13 @@
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
 // hue. Available color palettes: https://material.io/design/color/
 $frontend-primary: mat.define-palette(mat.$brown-palette);
-$frontend-accent: mat.define-palette(mat.$blue-palette, 100, 50, 400);
+$frontend-accent: mat.define-palette(mat.$brown-palette, 100, 50, 400);
 
 // The warn palette is optional (defaults to red).
 $frontend-warn: mat.define-palette(mat.$red-palette);
+$frontend-typography: mat.define-typography-config(
+  $font-family: "Patrick Hand",
+);
 
 // Create the theme object. A theme consists of configurations for individual
 // theming systems such as "color" or "typography".
@@ -25,7 +29,8 @@ $frontend-theme: mat.define-light-theme((
     primary: $frontend-primary,
     accent: $frontend-accent,
     warn: $frontend-warn,
-  )
+  ),
+  typography: $frontend-typography
 ));
 
 // Include theme styles for core and each component used in your app.

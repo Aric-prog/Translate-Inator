@@ -1,8 +1,9 @@
 import { Request, Response } from "express";
 import { inject } from "inversify";
-import { controller, httpPost } from "inversify-express-utils";
+import { controller, httpGet, httpPost } from "inversify-express-utils";
 
 import { STATUS_CODE } from "../../constants/HttpConstants.js";
+import { authenticated } from "../../middleware/Authenticated.js";
 import ValidateRequest from "../../middleware/ValidateRequest.js";
 import LoginDTO from "../dto/LoginDTO.js";
 import SignUpDTO from "../dto/SignUpDTO.js";
@@ -24,6 +25,12 @@ export default class AuthController {
     @httpPost("/login", ValidateRequest.using(LoginDTO.validator))
     async login(req: Request, res: Response) {
         const response = await this.authService.login(req.body as LoginDTO);
+        return res.status(STATUS_CODE.OK).json({ token: response });
+    }
+
+    @httpGet("/user", authenticated)
+    async user(req: Request, res: Response) {
+        const response = await this.authService.signUp(req.body as SignUpDTO);
         return res.status(STATUS_CODE.OK).json({ token: response });
     }
 }
