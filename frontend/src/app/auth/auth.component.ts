@@ -6,7 +6,8 @@ import { Errors, UserService } from '../core';
 
 @Component({
   selector: 'auth',
-  templateUrl: './auth.component.html'
+  templateUrl: './auth.component.html',
+  styleUrls: ['./auth.component.css']
 })
 export class AuthComponent implements OnInit {
   authType: string = '';
@@ -22,7 +23,7 @@ export class AuthComponent implements OnInit {
     private fb: FormBuilder
   ) {
     this.authForm = this.fb.group({
-      'email': ['', Validators.required],
+      'email': ['', Validators.required, Validators.email],
       'password': ['', Validators.required]
     });
   }
@@ -31,15 +32,16 @@ export class AuthComponent implements OnInit {
     this.route.url.subscribe(route => {
       // Gets last string of the url
       this.authType = route[route.length - 1].path;
-      this.title = (this.authType === 'login') ? 'Log in' : 'Sign up';
+      this.title = (this.authType === 'login') ? 'login' : 'register';
     })
   }
   submit() {
     const creds = this.authForm.value;
+    this.isSubmitting = true;
     this.userService
       .attemptAuth(this.authType, creds)
       .subscribe({
-        next: data => this.router.navigateByUrl('/'),
+        next: data => this.router.navigateByUrl('/',),
         error: err => {
           this.errors = err;
           this.isSubmitting = false;

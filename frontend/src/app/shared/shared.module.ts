@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
-
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ShowAuthedDirective } from './show-authed.directive';
 
 @NgModule({
@@ -18,6 +18,7 @@ import { ShowAuthedDirective } from './show-authed.directive';
     CommonModule,
     HttpClientModule,
     RouterModule,
+    BrowserAnimationsModule,
     ShowAuthedDirective
   ]
 })

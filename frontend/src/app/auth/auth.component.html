@@ -1,0 +1,23 @@
+<form class="w-full flex py-5 flex-1 flex-col items-center justify-center bg-primary-lighter">
+  <div *ngIf="authType == 'login'" class="text-primary text-xl font-bold pb-5">Log in to your account</div>
+  <div *ngIf="authType == 'register'" class="text-primary text-xl font-bold pb-5">Create a new account</div>
+
+  <mat-form-field *ngIf="authType == 'register'" class="w-1/3">
+    <mat-label>Username</mat-label>
+    <input formControlName="username" matInput placeholder="obama">
+  </mat-form-field>
+  <mat-form-field class="w-1/3">
+    <mat-label>Email</mat-label>
+    <input formControlName="email" matInput placeholder="example@email.com">
+  </mat-form-field>
+  <mat-form-field class="w-1/3">
+    <mat-label>Password</mat-label>
+    <input formControlName="password" matInput type="password" >
+  </mat-form-field>
+
+  <a *ngIf="authType == 'login'" mat-stroked-button [disabled]="isSubmitting" color="primary" class="mx-2">LOG IN</a>
+  <a *ngIf="authType == 'register'" mat-stroked-button [disabled]="isSubmitting" color="primary" class="mx-2">SIGN UP</a>
+
+  <a *ngIf="authType == 'login'" [routerLink]="['/register']" class="p-5 text-sm">Don't have an account?</a>
+  <a *ngIf="authType == 'register'" [routerLink]="['/login']" class="p-5 text-sm">Already have an account?</a>
+</form>
