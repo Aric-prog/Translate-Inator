@@ -8,6 +8,7 @@ import {
   JwtService,
   UserService,
   TodoService,
+  NoAuthGuard,
 } from './services';
 
 @NgModule({
@@ -19,7 +20,8 @@ import {
     ApiService,
     JwtService,
     TodoService,
-    UserService
+    UserService,
+    NoAuthGuard
   ]
 })
 export class CoreModule { }

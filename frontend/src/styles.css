@@ -518,6 +518,11 @@ video {
   margin-right: 0.5rem !important;
 }
 
+.mx-3 {
+  margin-left: 0.75rem !important;
+  margin-right: 0.75rem !important;
+}
+
 .flex {
   display: flex !important;
 }
@@ -526,12 +531,40 @@ video {
   display: contents !important;
 }
 
+.min-h-screen {
+  min-height: 100vh !important;
+}
+
+.w-4\/5 {
+  width: 80% !important;
+}
+
+.w-full {
+  width: 100% !important;
+}
+
 .flex-row {
   flex-direction: row !important;
 }
 
+.items-center {
+  align-items: center !important;
+}
+
+.justify-end {
+  justify-content: flex-end !important;
+}
+
 .justify-between {
   justify-content: space-between !important;
+}
+
+.gap-4 {
+  gap: 1rem !important;
+}
+
+.border-0 {
+  border-width: 0px !important;
 }
 
 .border-x-0 {
@@ -539,8 +572,24 @@ video {
   border-right-width: 0px !important;
 }
 
+.border-b-2 {
+  border-bottom-width: 2px !important;
+}
+
 .border-t-0 {
   border-top-width: 0px !important;
+}
+
+.p-5 {
+  padding: 1.25rem !important;
+}
+
+.pb-3 {
+  padding-bottom: 0.75rem !important;
+}
+
+.text-center {
+  text-align: center !important;
 }
 
 .text-xl {
@@ -548,16 +597,27 @@ video {
   line-height: 1.75rem !important;
 }
 
+.font-bold {
+  font-weight: 700 !important;
+}
+
 /* You can add global styles to this file, and also import other style files */
 
 :host {
-  font-family: 'Patrick Hand', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
-    Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-family: 'Patrick Hand';
   font-size: 14px;
   color: #333;
   box-sizing: border-box;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+*[lang=ja] {
+  font-family: 'Kosugi Maru' !important;
+}
+
+* {
+  font-family: 'Patrick Hand', 'Kosugi Maru', Roboto;
 }
 
 h1,
@@ -571,6 +631,11 @@ h6 {
 
 p {
   margin: 0;
+  white-space: normal;
+}
+
+.mdc-text-field {
+  background-color: transparent !important;
 }
 
 .border-thin {
@@ -612,5 +677,19 @@ html, body {
 body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+@media (min-width: 768px) {
+  .md\:inline-grid {
+    display: inline-grid !important;
+  }
+
+  .md\:grid-cols-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  .md\:flex-col {
+    flex-direction: column !important;
+  }
 }
 
