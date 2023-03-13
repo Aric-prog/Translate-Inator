@@ -28,7 +28,6 @@ export class HomeComponent implements OnInit {
     this.userService.isAuthenticated.subscribe(
       (authenticated) => {
         this.isAuthenticated = authenticated;
-        console.log(this.isAuthenticated)
         if (!authenticated) {
           this.router.navigateByUrl('/login');
         }
@@ -42,7 +41,6 @@ export class HomeComponent implements OnInit {
   }
 
   insertNote(body: string) {
-    console.log(body)
     this.todoService.insertTodo(body).subscribe({
       next: (todo: Todo) => {
         this.todos.push(todo);
