@@ -12,7 +12,7 @@ import { Errors, UserService } from '../core';
 export class AuthComponent implements OnInit {
   authType: string = '';
   title: string = '';
-  errors: Errors = { errors: {} };
+  errors: Errors = { error: {} };
   isSubmitting = false;
   authForm: FormGroup;
 
@@ -23,7 +23,7 @@ export class AuthComponent implements OnInit {
     private fb: FormBuilder
   ) {
     this.authForm = this.fb.group({
-      'email': ['', Validators.required, Validators.email],
+      'email': ['', ([Validators.required, Validators.email])],
       'password': ['', Validators.required]
     });
   }
@@ -33,6 +33,9 @@ export class AuthComponent implements OnInit {
       // Gets last string of the url
       this.authType = route[route.length - 1].path;
       this.title = (this.authType === 'login') ? 'login' : 'register';
+      if (this.authType === 'register') {
+        this.authForm.addControl('username', new FormControl());
+      }
     })
   }
   submit() {
@@ -41,11 +44,13 @@ export class AuthComponent implements OnInit {
     this.userService
       .attemptAuth(this.authType, creds)
       .subscribe({
-        next: data => this.router.navigateByUrl('/',),
-        error: err => {
-          this.errors = err;
+        next: (data) => { this.userService.setAuth(data); },
+        error: (error) => {
+          console.log(error)
+          this.errors = error;
           this.isSubmitting = false;
         }
       })
+
   }
 }

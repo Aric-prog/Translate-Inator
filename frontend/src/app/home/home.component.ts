@@ -16,8 +16,6 @@ export class HomeComponent implements OnInit {
 
   isAuthenticated: boolean;
   ngOnInit() {
-    console.log("asdfl")
-
     this.userService.isAuthenticated.subscribe(
       (authenticated) => {
         this.isAuthenticated = authenticated;

@@ -5,7 +5,7 @@ import { Observable, BehaviorSubject, ReplaySubject } from 'rxjs';
 import { ApiService } from './api.service';
 import { JwtService } from './jwt.service';
 import { User } from '../models';
-import { map, distinctUntilChanged } from 'rxjs/operators';
+import { map, distinctUntilChanged, catchError } from 'rxjs/operators';
 
 @Injectable()
 export class UserService {
@@ -29,8 +29,7 @@ export class UserService {
       this.apiService.get('/user')
         .subscribe({
           next: (data: User) => this.setAuth(data),
-          error: (err: Error) => this.purgeAuth(),
-          complete: () => { },
+          error: (err: Error) => { this.purgeAuth() },
         });
     } else {
       // Remove any potential remnants of previous auth states
@@ -52,15 +51,9 @@ export class UserService {
     this.isAuthenticatedSubject.next(false);
   }
 
-  attemptAuth(type: string, credentials: string): Observable<User> {
-    const route = (type === 'login') ? '/login' : '';
-    return this.apiService.post('/users' + route, { user: credentials })
-      .pipe(map(
-        data => {
-          this.setAuth(data.user);
-          return data;
-        }
-      ));
+  attemptAuth(type: string, credentials: Object = {}): Observable<User> {
+    const route = (type === 'login') ? '/login' : '/register';
+    return this.apiService.post('/auth' + route, credentials)
   }
 
   getCurrentUser(): User {
