@@ -46,9 +46,9 @@ export class AuthComponent implements OnInit {
       .attemptAuth(this.authType, creds)
       .subscribe({
         next: (data) => {
-          console.log(data);
-          this.userService.setAuth(data);
           this.isSubmitting = false;
+          this.userService.setAuth(data);
+          this.router.navigateByUrl('/')
         },
         error: (error) => {
           this.errors = error;

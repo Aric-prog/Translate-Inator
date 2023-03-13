@@ -13,7 +13,8 @@ export class ListErrorsComponent {
   set errors(errorList: Errors) {
     if (errorList.error instanceof Array) {
       for (const i in errorList.error) {
-        this.formattedErrors.push(errorList.error[i]);
+        const a: any = errorList.error[i];
+        this.formattedErrors.push(a.msg);
       }
     } else {
       this.formattedErrors = Object.keys(errorList.error || {})
