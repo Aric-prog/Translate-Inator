@@ -16,7 +16,7 @@ export const authenticated = (
     const token = header.split(" ")[1];
     jwt.verify(token, SECRET.PRIVATE_KEY, (err, decodedToken) => {
         if (err) next(err);
-
+        res.locals.token = token;
         res.locals.decodedToken = decodedToken;
         next();
     });

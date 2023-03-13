@@ -1,10 +1,10 @@
 import { check } from "express-validator";
 
 export default class TranslateDTO {
-    text: string;
+    text: string[];
     languageCode: string;
 
-    constructor(text: string, languageCode: string) {
+    constructor(text: string[], languageCode: string) {
         this.text = text;
         this.languageCode = languageCode;
     }

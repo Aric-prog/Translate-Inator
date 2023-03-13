@@ -31,9 +31,15 @@ export default class TodoController {
         return res.status(STATUS_CODE.OK).json(response);
     }
 
-    @httpDelete("/todo", ValidateRequest.using(TodoDTO.validator))
+    @httpDelete("/todo", ValidateRequest.using(TodoDTO.idValidator))
     async deleteTodo(req: Request, res: Response) {
         const response = await this.todoService.deleteUserTodo(res.locals.decodedToken.uid, req.body.todoId);
         return res.status(STATUS_CODE.OK).json(response);
+    }
+
+    @httpDelete("/todos", ValidateRequest.using(TodoDTO.idValidator))
+    async deleteTodos(req: Request, res: Response) {
+        const response = await this.todoService.deleteUserTodos(res.locals.decodedToken.uid, req.body.todoId);
+        return res.status(STATUS_CODE.OK).json();
     }
 }

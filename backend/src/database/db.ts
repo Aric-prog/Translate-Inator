@@ -18,7 +18,7 @@ export default class DbService {
 
     async query(
         query: string,
-        values: any[],
+        values?: any[],
         errorMap?: PgErrorMap
     ): Promise<pg.QueryResult<any>> {
         try {
@@ -28,6 +28,7 @@ export default class DbService {
                 const pgError: string = errorMap.get(err.code);
                 throw new DatabaseException(pgError);
             } else if (err instanceof pg.DatabaseError) {
+                console.log(err);
                 throw new Error(err.detail);
             }
         }

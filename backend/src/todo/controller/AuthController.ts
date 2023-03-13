@@ -25,12 +25,16 @@ export default class AuthController {
     @httpPost("/login", ValidateRequest.using(LoginDTO.validator))
     async login(req: Request, res: Response) {
         const response = await this.authService.login(req.body as LoginDTO);
-        return res.status(STATUS_CODE.OK).json({ token: response });
+        return res.status(STATUS_CODE.OK).json(response);
     }
 
     @httpGet("/user", authenticated)
     async user(req: Request, res: Response) {
-        const response = await this.authService.signUp(req.body as SignUpDTO);
-        return res.status(STATUS_CODE.OK).json({ token: response });
+        const response = await this.authService.getUserData(res.locals.decodedToken.uid);
+        return res.status(STATUS_CODE.OK).json({
+            token: res.locals.token,
+            username: response.username,
+            email: response.email
+        });
     }
 }

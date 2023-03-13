@@ -51,8 +51,9 @@ export default class AuthService {
         };
     }
 
-    async getUserByEmail(email: string): Promise<Account> {
-        return this.authRepository.getUserByEmail(email);
+    async getUserData(id: number) {
+        const user: Account = await this.authRepository.getUserById(id);
+        return user;
     }
 
     createPasswordHash(password: string, salt: string) {

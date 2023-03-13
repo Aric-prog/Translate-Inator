@@ -17,8 +17,11 @@ export default class TranslateService {
         @param languageCode variable uses ISO-639 standard. 
         The list can be found here at https://cloud.google.com/translate/docs/languages.
     */
-    async translateText(translateDTO: TranslateDTO): Promise<string> {
-        const [translation] = await this.translate.translate(translateDTO.text, translateDTO.languageCode);
+    async translateText(translateDTO: TranslateDTO): Promise<string[]> {
+        const [translation] = await this.translate.translate(translateDTO.text, {
+            from: "en",
+            to: translateDTO.languageCode
+        });
         return translation;
     }
 }
