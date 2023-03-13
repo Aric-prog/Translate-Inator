@@ -13,7 +13,8 @@
   </mat-form-field>
   <mat-form-field class="w-1/3">
     <mat-label>Password</mat-label>
-    <input formControlName="password" matInput type="password" >
+    <input formControlName="password" matInput type="password">
+    <mat-error *ngIf=""></mat-error>
   </mat-form-field>
 
   <button *ngIf="authType == 'login'" mat-stroked-button type="submit" [disabled]="!authForm.valid" color="primary" class="mx-2">LOG IN</button>

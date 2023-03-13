@@ -11,8 +11,14 @@ export class ListErrorsComponent {
 
   @Input()
   set errors(errorList: Errors) {
-    this.formattedErrors = Object.keys(errorList.error || {})
-      .map(key => `${errorList.error[key]}`);
+    if (errorList.error instanceof Array) {
+      for (const i in errorList.error) {
+        this.formattedErrors.push(i);
+      }
+    } else {
+      this.formattedErrors = Object.keys(errorList.error || {})
+        .map(key => `${errorList.error[key]}`);
+    }
   }
 
   get errorList() { return this.formattedErrors; }

@@ -23,8 +23,8 @@ export class AuthComponent implements OnInit {
     private fb: FormBuilder
   ) {
     this.authForm = this.fb.group({
-      'email': ['', ([Validators.required, Validators.email])],
-      'password': ['', Validators.required]
+      'email': ['', [Validators.required, Validators.email]],
+      'password': ['', [Validators.required, Validators.minLength(6)]]
     });
   }
 
@@ -34,7 +34,7 @@ export class AuthComponent implements OnInit {
       this.authType = route[route.length - 1].path;
       this.title = (this.authType === 'login') ? 'login' : 'register';
       if (this.authType === 'register') {
-        this.authForm.addControl('username', new FormControl());
+        this.authForm.addControl('username', new FormControl('', Validators.required));
       }
     })
   }
