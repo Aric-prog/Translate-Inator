@@ -1,0 +1,46 @@
+<div class="w-full flex flex-col items-center p-5 bg-primary-lighter min-h-screen">
+  <mat-progress-bar class="my-5 w-full animate" mode="indeterminate" *ngIf="isTranslating"></mat-progress-bar>
+  <div class="md:inline-grid md:grid-cols-2 w-full gap-4">
+
+    <!-- Column 1 -->
+    <div class="flex md:flex-col gap-4 items-center ">
+      <div class="w-4/5 border-thin border-primary">
+        <mat-selection-list #english_input>
+          <h1 matListItemTitle class="text-accent w-full text-center text-xl font-bold text-bold border-primary border-thin border-0 border-b-2 pb-3">English</h1>
+          <mat-list-option *ngFor="let i of todos" [value]="[i.id, i.body]" color="accent" matRipple [matRippleColor]="rippleColor" [disableRipple]="true"><p>
+            {{i.body}}
+          </p></mat-list-option>
+          <h1 matListItemTitle *ngIf="todos.length == 0" class="text-accent w-full text-center font-bold text-bold border-primary border-thin border-0 pb-3">No notes found :c  </h1>
+        </mat-selection-list>
+      </div>
+      <form class="w-4/5" id="insert-note-form" (ngSubmit)="insertNote(note_input.value)">
+        <mat-form-field color="primary" class="insert-note w-full">
+          <mat-label>Insert note</mat-label>
+          <input type="text" matInput #note_input maxlength="128">
+          <mat-hint align="end">{{note_input.value.length}} / 128</mat-hint>
+        </mat-form-field>
+      </form>
+      <div class="w-4/5 flex flex-row justify-end">
+        <button mat-mini-fab class="mx-3" form="insert-note-form" type="submit" color="primary"><mat-icon>add</mat-icon></button>
+        <button mat-mini-fab class="mx-3" color="primary" [disabled]="!(english_input.selectedOptions.selected.length > 0)" (click)="translateSelectedNote(english_input.selectedOptions.selected.values())"><mat-icon>translate</mat-icon></button>
+        <button mat-mini-fab class="mx-3" color="warn" [disabled]="!(english_input.selectedOptions.selected.length > 0)" (click)="deleteSelectedNote(english_input.selectedOptions.selected.values())"><mat-icon>delete</mat-icon></button>
+      </div>
+    </div>
+
+    <!-- Column 2 -->
+    <div class="flex md:flex-col gap-4 items-center ">
+      <div class="w-4/5 border-thin border-primary">
+        <mat-list #japanese_output>
+          <h1 matListItemTitle lang="ja" class="text-accent w-full text-center text-xl font-bold text-bold border-primary border-thin border-0 border-b-2 pb-3">日本語</h1>
+          <mat-list-item *ngFor="let i of translatedTodos" color="accent" lang="ja" [disableRipple]="true">
+            <p>
+              {{ i }}
+            </p>
+
+          </mat-list-item>
+          <h1 matListItemTitle *ngIf="translatedTodos.length == 0" class="text-accent w-full text-center font-bold text-bold border-primary border-thin border-0 pb-3">No translations requested </h1>
+        </mat-list>
+      </div>
+    </div>
+  </div>
+</div>

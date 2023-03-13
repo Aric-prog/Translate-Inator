@@ -3,12 +3,18 @@ import { inject, injectable } from "inversify";
 import TodoRepository from "../repository/TodoRepository.js";
 import CreateTodoDTO from "../dto/CreateTodoDTO.js";
 import Todo from "../../database/models/Todo.js";
+import TranslateService from "./TranslateService.js";
 
 @injectable()
 export default class TodoService {
     private readonly todoRepository;
-    constructor(@inject(TodoRepository) todoRepository: TodoRepository) {
+    private readonly translateService;
+    constructor(
+        @inject(TodoRepository) todoRepository: TodoRepository,
+        @inject(TranslateService) translateService: TranslateService) {
+
         this.todoRepository = todoRepository;
+        this.translateService = translateService;
     }
 
     async createTodo(accountId: number, createTodoDTO: CreateTodoDTO): Promise<Todo> {
@@ -20,6 +26,12 @@ export default class TodoService {
         const todos: Todo[] = await this.todoRepository.getTodoByUser(accountId);
         const todo: Todo = await this.todoRepository.getTodoById(todoId);
         if (todos.includes(todo)) return await this.todoRepository.deleteTodo(todoId);
+    }
+
+    async deleteUserTodos(accountId: number, todoId: number[]): Promise<void> {
+        const todos: number[] = await (await this.todoRepository.getTodoByUser(accountId)).map(i => i.id);
+        const doesAllTodosBelongToUser: boolean = todoId.every(i => todos.includes(i));
+        if (doesAllTodosBelongToUser) return await this.todoRepository.deleteMultipleTodo(todoId);
     }
 
     async getUserTodos(accountId: number): Promise<Todo[]> {

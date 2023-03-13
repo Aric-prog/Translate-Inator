@@ -3,9 +3,14 @@ import "reflect-metadata";
 import { Container } from "inversify";
 import { InversifyExpressServer } from "inversify-express-utils";
 import { errorHandler } from "./middleware/ErrorHandler.js";
+import { fileURLToPath } from "url";
 
+import cors from "cors";
+import path from "path";
 import * as dotenv from "dotenv";
+
 import DbService from "./database/db.js";
+import TranslateService from "./todo/service/TranslateService.js";
 
 import AuthRepository from "./todo/repository/AuthRepository.js";
 import TodoRepository from "./todo/repository/TodoRepository.js";
@@ -13,10 +18,9 @@ import TodoRepository from "./todo/repository/TodoRepository.js";
 import AuthService from "./todo/service/AuthService.js";
 import TodoService from "./todo/service/TodoService.js";
 
+import "./todo/controller/TranslateController.js";
 import "./todo/controller/TodoController.js";
 import "./todo/controller/AuthController.js";
-import { fileURLToPath } from "url";
-import path from "path";
 
 export default class App {
     private readonly container: Container;
@@ -28,8 +32,11 @@ export default class App {
     }
 
     bindService(): void {
+        // External services
         this.container.bind(DbService).toSelf();
+        this.container.bind(TranslateService).toSelf();
 
+        // Internal services
         this.container.bind(AuthRepository).toSelf();
         this.container.bind(TodoRepository).toSelf();
         this.container.bind(TodoService).toSelf();
@@ -46,20 +53,21 @@ export default class App {
         );
 
         server.setConfig((app) => {
+            app.use(cors());
             app.use(express.json());
         });
         server.setErrorConfig((app) => {
             app.use(errorHandler);
         });
 
-        // Tests connection
+        // Tests db connection
         const dbService: DbService = this.container.get(DbService);
         const conn = await dbService.pool.connect();
         conn.release();
 
         const app = server.build();
-        app.listen(process.env.PORT, () => {
-            console.log("Server is running at PORT : " + process.env.PORT);
+        app.listen(process.env.BACKEND_PORT || 8000, () => {
+            console.log("Server is running at PORT : " + (process.env.BACKEND_PORT || 8000));
         });
     }
 }

@@ -18,7 +18,7 @@ export default class DbService {
 
     async query(
         query: string,
-        values: any[],
+        values?: any[],
         errorMap?: PgErrorMap
     ): Promise<pg.QueryResult<any>> {
         try {
@@ -31,5 +31,9 @@ export default class DbService {
                 throw new Error(err.detail);
             }
         }
+    }
+
+    async testConnection(): Promise<void> {
+        this.pool.connect();
     }
 }

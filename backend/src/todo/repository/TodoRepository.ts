@@ -58,4 +58,10 @@ export default class TodoRepository {
         );
         return rows[0] as Todo;
     }
+    async deleteMultipleTodo(todoIds: number[]): Promise<void> {
+        const { rows } = await this.db.query(
+            `DELETE FROM todo 
+            WHERE id IN (${todoIds.join(',')})`
+        );
+    }
 }

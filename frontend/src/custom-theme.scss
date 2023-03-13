@@ -1,0 +1,101 @@
+
+// Custom Theming for Angular Material
+// For more information: https://material.angular.io/guide/theming
+@use '@angular/material' as mat;
+// Plus imports for other components in your app.
+@import url(https://fonts.googleapis.com/css2?family=Kosugi+Maru&family=Patrick+Hand&display=swap);
+
+// Include the common styles for Angular Material. We include this here so that you only
+// have to load a single css file for Angular Material in your app.
+// Be sure that you only ever include this mixin once!
+@include mat.core();
+
+// Define the palettes for your theme using the Material Design palettes available in palette.scss
+// (imported above). For each palette, you can optionally specify a default, lighter, and darker
+// hue. Available color palettes: https://material.io/design/color/
+$frontend-primary: mat.define-palette(mat.$brown-palette);
+$frontend-accent: mat.define-palette(mat.$blue-grey-palette);
+
+// The warn palette is optional (defaults to red).
+$frontend-warn: mat.define-palette(mat.$red-palette);
+$frontend-typography: mat.define-typography-config(
+  $font-family: "Patrick Hand",
+);
+
+// Create the theme object. A theme consists of configurations for individual
+// theming systems such as "color" or "typography".
+$frontend-theme: mat.define-light-theme((
+  color: (
+    primary: $frontend-primary,
+    accent: $frontend-accent,
+    warn: $frontend-warn,
+  ),
+  typography: $frontend-typography
+));
+
+// Include theme styles for core and each component used in your app.
+// Alternatively, you can import and @include the theme mixins for each component
+// that you are using.
+.bg-primary {
+  background: mat.get-color-from-palette($frontend-primary, "default") !important;
+}
+.bg-primary-lighter {
+  background: mat.get-color-from-palette($frontend-primary, "lighter") !important;
+}
+.bg-primary-darker {
+  background: mat.get-color-from-palette($frontend-primary, "darker") !important;
+}
+
+.text-primary {
+  color: mat.get-color-from-palette($frontend-primary, "default") !important;
+}
+.text-primary-lighter {
+  color: mat.get-color-from-palette($frontend-primary, "lighter") !important;
+}
+.text-primary-darker {
+  color: mat.get-color-from-palette($frontend-primary, "darker") !important;
+}
+
+.border-primary {
+  border-color: mat.get-color-from-palette($frontend-primary, "default") !important;
+}
+.border-primary-lighter {
+  border-color: mat.get-color-from-palette($frontend-primary, "lighter") !important;
+}
+.border-primary-darker {
+  border-color: mat.get-color-from-palette($frontend-primary, "darker") !important;
+}
+
+.bg-accent {
+  background: mat.get-color-from-palette($frontend-accent, "default") !important;
+}
+.bg-accent-lighter {
+  background: mat.get-color-from-palette($frontend-accent, "lighter") !important;
+}
+.bg-accent-darker {
+  background: mat.get-color-from-palette($frontend-accent, "darker") !important;
+}
+
+.text-accent {
+  color: mat.get-color-from-palette($frontend-accent, "default") !important;
+}
+.text-accent-lighter {
+  color: mat.get-color-from-palette($frontend-accent, "lighter") !important;
+}
+.text-accent-darker {
+  color: mat.get-color-from-palette($frontend-accent, "darker") !important;
+}
+
+.border-accent {
+  border-color: mat.get-color-from-palette($frontend-accent, "default") !important;
+}
+.border-accent-lighter {
+  border-color: mat.get-color-from-palette($frontend-accent, "lighter") !important;
+}
+.border-accent-darker {
+  border-color: mat.get-color-from-palette($frontend-accent, "darker") !important;
+}
+
+
+@include mat.all-component-themes($frontend-theme);
+

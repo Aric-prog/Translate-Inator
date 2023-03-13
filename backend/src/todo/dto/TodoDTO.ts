@@ -1,7 +1,7 @@
 import { check } from "express-validator";
 
 export default class TodoDTO {
-    static validator = [
+    static idValidator = [
         check("todoId", "todoId field does not exist").exists(),
     ];
 }
