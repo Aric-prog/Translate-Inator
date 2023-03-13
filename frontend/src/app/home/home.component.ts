@@ -54,6 +54,8 @@ export class HomeComponent implements OnInit {
     for (const i of selected) {
       todoId.push(i.value[0])
       i._elementRef.nativeElement.remove()
+
+      this.todos.splice(this.todos.findIndex(todo => todo.id == i.value[0]), 1)
     }
 
     this.todoService.deleteTodoList(todoId).subscribe({

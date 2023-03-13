@@ -1,6 +1,6 @@
-<div class="w-full p-5 bg-primary-lighter min-h-screen">
-  <mat-progress-bar class="my-5 w-4/5 animate" mode="indeterminate" *ngIf="isTranslating"></mat-progress-bar>
-  <div class="md:inline-grid md:grid-cols-2  w-full gap-4">
+<div class="w-full flex flex-col items-center p-5 bg-primary-lighter min-h-screen">
+  <mat-progress-bar class="my-5 w-full animate" mode="indeterminate" *ngIf="isTranslating"></mat-progress-bar>
+  <div class="md:inline-grid md:grid-cols-2 w-full gap-4">
 
     <!-- Column 1 -->
     <div class="flex md:flex-col gap-4 items-center ">
@@ -10,6 +10,7 @@
           <mat-list-option *ngFor="let i of todos" [value]="[i.id, i.body]" color="accent" matRipple [matRippleColor]="rippleColor" [disableRipple]="true"><p>
             {{i.body}}
           </p></mat-list-option>
+          <h1 matListItemTitle *ngIf="todos.length == 0" class="text-accent w-full text-center font-bold text-bold border-primary border-thin border-0 pb-3">No notes found :c  </h1>
         </mat-selection-list>
       </div>
       <form class="w-4/5" id="insert-note-form" (ngSubmit)="insertNote(note_input.value)">
@@ -35,7 +36,9 @@
             <p>
               {{ i }}
             </p>
+
           </mat-list-item>
+          <h1 matListItemTitle *ngIf="translatedTodos.length == 0" class="text-accent w-full text-center font-bold text-bold border-primary border-thin border-0 pb-3">No translations requested </h1>
         </mat-list>
       </div>
     </div>
