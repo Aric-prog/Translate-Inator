@@ -27,23 +27,32 @@ export default class AuthService {
             salt
         );
 
+
         return jwt.sign({ uid: id }, SECRET.PRIVATE_KEY, {
             expiresIn: "1d",
         });
     }
 
-    async login(loginDTO: LoginDTO): Promise<string> {
+    async login(loginDTO: LoginDTO) {
         // Authenticate them here by checking if their input = hash
         const user: Account = await this.authRepository.getUserByEmail(loginDTO.email);
         if (!user) throw new InvalidInputException("Invalid login credentials");
         if (this.createPasswordHash(loginDTO.password, user.salt) !== user.hashedpassword)
             throw new InvalidInputException("Invalid login credentials");
 
-        return jwt.sign({
-            uid: user.id
-        }, SECRET.PRIVATE_KEY, {
+        const jwtToken = jwt.sign({ uid: user.id }, SECRET.PRIVATE_KEY, {
             expiresIn: "1d",
         });
+
+        return {
+            token: jwtToken,
+            email: user.email,
+            username: user.username,
+        };
+    }
+
+    async getUserByEmail(email: string): Promise<Account> {
+        return this.authRepository.getUserByEmail(email);
     }
 
     createPasswordHash(password: string, salt: string) {

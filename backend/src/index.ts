@@ -5,6 +5,7 @@ import { InversifyExpressServer } from "inversify-express-utils";
 import { errorHandler } from "./middleware/ErrorHandler.js";
 import { fileURLToPath } from "url";
 
+import cors from "cors";
 import path from "path";
 import * as dotenv from "dotenv";
 
@@ -52,6 +53,7 @@ export default class App {
         );
 
         server.setConfig((app) => {
+            app.use(cors());
             app.use(express.json());
         });
         server.setErrorConfig((app) => {
