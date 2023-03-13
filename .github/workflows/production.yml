@@ -37,13 +37,13 @@ jobs:
 
       - name: Build and pushes the backend Docker image
         run: |
-          docker build ./backend --tag asia.gcr.io/${{ secrets.PROJECT_ID }}/backend:production
-          docker push asia.gcr.io/${{ secrets.PROJECT_ID }}/backend:production
+          docker build ./backend --tag asia.gcr.io/${{ secrets.PROJECT_ID }}/backend:${{ github.sha }}
+          docker push asia.gcr.io/${{ secrets.PROJECT_ID }}/backend:${{ github.sha }}
 
       - name: Build and pushes the frontend Docker image
         run: |
-          docker build ./frontend --tag asia.gcr.io/${{ secrets.PROJECT_ID }}/frontend:production
-          docker push asia.gcr.io/${{ secrets.PROJECT_ID }}/frontend:production
+          docker build ./frontend --tag asia.gcr.io/${{ secrets.PROJECT_ID }}/frontend:${{ github.sha }}
+          docker push asia.gcr.io/${{ secrets.PROJECT_ID }}/frontend:${{ github.sha }}
 
   deployment:
     needs: docker
