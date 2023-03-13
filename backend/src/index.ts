@@ -67,10 +67,6 @@ export default class App {
         conn.release();
 
         const app = server.build();
-<<<<<<< HEAD
-=======
-
->>>>>>> main
         app.listen(process.env.BACKEND_PORT || 8000, () => {
             console.log("Server is running at PORT : " + (process.env.BACKEND_PORT || 8000));
         });
