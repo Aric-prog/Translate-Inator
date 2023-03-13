@@ -26,10 +26,10 @@ export class UserService {
   populate() {
     // If JWT detected, attempt to get & store user's info
     if (this.jwtService.getToken()) {
-      this.apiService.get('/user')
+      this.apiService.get('/auth/user')
         .subscribe({
           next: (data: User) => this.setAuth(data),
-          error: (err: Error) => { this.purgeAuth() },
+          error: (err: Error) => this.purgeAuth(),
         });
     } else {
       // Remove any potential remnants of previous auth states

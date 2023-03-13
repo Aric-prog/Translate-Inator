@@ -5,7 +5,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AuthModule } from './auth/auth.module';
-import { CoreModule, UserService } from './core';
+import { CoreModule } from './core';
 import { HomeModule } from './home/home.module';
 import { HeaderComponent } from './shared/layout/header.component';
 import { MaterialModule } from './shared/material.module';

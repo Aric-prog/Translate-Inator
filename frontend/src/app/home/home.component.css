@@ -5,3 +5,7 @@
 button{
   white-space: pre-wrap !important;
 }
+p {
+  margin: 0;
+  white-space: normal;
+}

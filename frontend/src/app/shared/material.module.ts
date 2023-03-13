@@ -8,6 +8,7 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatListModule } from '@angular/material/list';
 import { MatRippleModule, MAT_RIPPLE_GLOBAL_OPTIONS, RippleGlobalOptions } from '@angular/material/core';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatIconModule } from '@angular/material/icon';
 const globalRippleConfig: RippleGlobalOptions = {
   animation: {
@@ -23,6 +24,7 @@ const modules = [
   MatFormFieldModule,
   MatSelectModule,
   MatGridListModule,
+  MatProgressBarModule,
   MatDividerModule,
   MatListModule,
   MatRippleModule,
