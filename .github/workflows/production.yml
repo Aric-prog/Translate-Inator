@@ -73,7 +73,7 @@ jobs:
           echo "PROJECT_ID=$PROJECT_ID" >> .env; \
           ls -a; \
           gcloud compute scp .env docker-compose.prod.yaml hernandoaric@todo-translator:~/VideoTranslatorAI/ --zone=australia-southeast2-b --ssh-key-expire-after=2m; \
-          gcloud compute scp --recurse nginx hernandoaric@todo-translator:~/VideoTranslatorAI/nginx/ --zone=australia-southeast2-b --ssh-key-expire-after=2m
+          gcloud compute scp --recurse nginx hernandoaric@todo-translator:~/VideoTranslatorAI/ --zone=australia-southeast2-b --ssh-key-expire-after=2m
 
       - name: "SSH into GCE instance and run docker compose"
         run: |
