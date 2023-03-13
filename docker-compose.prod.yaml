@@ -16,7 +16,7 @@ services:
       
   backend:
     container_name: ${BACKEND_CONTAINER_NAME}
-    image: asia.gcr.io/${PROJECT_ID}/backend:production
+    image: asia.gcr.io/${PROJECT_ID}/backend:${GITHUB_SHA}
     depends_on:
       - db
     environment:
@@ -31,7 +31,7 @@ services:
 
   frontend:
     container_name: ${FRONTEND_CONTAINER_NAME}
-    image: asia.gcr.io/${PROJECT_ID}/frontend:production
+    image: asia.gcr.io/${PROJECT_ID}/frontend:${GITHUB_SHA}
     environment:
       - PORT=${FRONTEND_PORT}
       - DOMAIN=${DOMAIN}

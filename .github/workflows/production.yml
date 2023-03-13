@@ -37,13 +37,13 @@ jobs:
 
       - name: Build and pushes the backend Docker image
         run: |
-          docker build ./backend --tag asia.gcr.io/${{ secrets.PROJECT_ID }}/backend:production
-          docker push asia.gcr.io/${{ secrets.PROJECT_ID }}/backend:production
+          docker build ./backend --tag asia.gcr.io/${{ secrets.PROJECT_ID }}/backend:${{ github.sha }}
+          docker push asia.gcr.io/${{ secrets.PROJECT_ID }}/backend:${{ github.sha }}
 
       - name: Build and pushes the frontend Docker image
         run: |
-          docker build ./frontend --tag asia.gcr.io/${{ secrets.PROJECT_ID }}/frontend:production
-          docker push asia.gcr.io/${{ secrets.PROJECT_ID }}/frontend:production
+          docker build ./frontend --tag asia.gcr.io/${{ secrets.PROJECT_ID }}/frontend:${{ github.sha }}
+          docker push asia.gcr.io/${{ secrets.PROJECT_ID }}/frontend:${{ github.sha }}
 
   deployment:
     needs: docker
@@ -72,12 +72,12 @@ jobs:
           echo "GITHUB_SHA=$GITHUB_SHA" >> .env; \
           echo "PROJECT_ID=$PROJECT_ID" >> .env; \
           ls -a; \
-          gcloud compute scp .env docker-compose.prod.yaml hernandoaric@todo-translator:~/VideoTranslatorAI/ --zone=australia-southeast2-b --ssh-key-expire-after=2m; \
-          gcloud compute scp --recurse nginx hernandoaric@todo-translator:~/VideoTranslatorAI/nginx/ --zone=australia-southeast2-b --ssh-key-expire-after=2m
+          gcloud compute scp .env docker-compose.prod.yaml docker-compose.setup.yaml hernandoaric@todo-translator:~/VideoTranslatorAI/ --zone=australia-southeast2-b --ssh-key-expire-after=2m; \
+          gcloud compute scp --recurse nginx hernandoaric@todo-translator:~/VideoTranslatorAI/ --zone=australia-southeast2-b --ssh-key-expire-after=2m
 
       - name: "SSH into GCE instance and run docker compose"
         run: |
           gcloud compute ssh hernandoaric@todo-translator \
           --zone=australia-southeast2-b \
           --ssh-key-expire-after=2m \
-          --command="cd"
+          --command="cd ~/VideoTranslatorAI && docker-compose -f ./docker-compose.prod.yaml up -d"
