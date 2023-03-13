@@ -1,7 +1,11 @@
 <mat-toolbar class="flex flex-row justify-between bg-primary-lighter border-thick border-primary border-t-0 border-x-0">
   <a mat-button color="primary" class="text-xl"> <mat-icon>note</mat-icon>Translateinator</a>
   <div *appShowAuthed="false" class="flex flex-row">
-    <a [routerLink]="['/register']" mat-stroked-button color="primary" class="mx-2">Sign up</a>
-    <a [routerLink]="['/login']" mat-stroked-button color="primary" class="mx-2">Log in</a>
+    <a [routerLink]="['/register']" mat-stroked-button color="primary" class="mx-2">SIGN UP</a>
+    <a [routerLink]="['/login']" mat-stroked-button color="primary" class="mx-2">LOG IN</a>
+  </div>
+  <div *appShowAuthed="true" class="flex flex-row">
+    <button mat-button color="primary" class="mx-2">{{currentUser.username}}</button>
+    <a [routerLink]="['/login']" (click)="logout()" mat-stroked-button color="primary" class="mx-2">Log out</a>
   </div>
 </mat-toolbar>

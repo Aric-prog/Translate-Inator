@@ -21,7 +21,7 @@ export class HomeComponent implements OnInit {
   isTranslating: boolean = false;
   rippleColor: string = "rgba(96,125,139, 0.1)"
   currentUser: User;
-  todos: Todo[];
+  todos: Todo[] = [];
   translatedTodos: string[] = [];
 
   ngOnInit() {
