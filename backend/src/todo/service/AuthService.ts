@@ -15,7 +15,7 @@ export default class AuthService {
         this.authRepository = authRepository;
     }
 
-    async signUp(signupDto: SignUpDTO): Promise<string> {
+    async signUp(signupDto: SignUpDTO) {
         const [hashedPassword, salt] = this.createNewPasswordHash(
             signupDto.password
         );
@@ -28,9 +28,14 @@ export default class AuthService {
         );
 
 
-        return jwt.sign({ uid: id }, SECRET.PRIVATE_KEY, {
+        const jwtToken = jwt.sign({ uid: id }, SECRET.PRIVATE_KEY, {
             expiresIn: "1d",
         });
+        return {
+            token: jwtToken,
+            email: signupDto.email,
+            username: signupDto.username,
+        };
     }
 
     async login(loginDTO: LoginDTO) {

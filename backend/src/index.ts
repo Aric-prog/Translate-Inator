@@ -54,8 +54,8 @@ export default class App {
         );
 
         server.setConfig((app) => {
-            app.use(cors());
             app.use(express.json());
+            app.use(cors());
         });
         server.setErrorConfig((app) => {
             app.use(errorHandler);
