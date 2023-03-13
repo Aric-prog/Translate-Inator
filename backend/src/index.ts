@@ -46,7 +46,6 @@ export default class App {
     async setup() {
         const __filename = fileURLToPath(import.meta.url);
         const __dirname = path.dirname(__filename);
-        const ROUTE_PREPEND = process.env.BACKEND_ROUTE_PREPEND;
 
         dotenv.config({ path: __dirname + "/.env" });
         const server: InversifyExpressServer = new InversifyExpressServer(

@@ -53,6 +53,7 @@ export class UserService {
 
   attemptAuth(type: string, credentials: Object = {}): Observable<User> {
     const route = (type === 'login') ? '/login' : '/register';
+
     return this.apiService.post('/auth' + route, credentials)
   }
 

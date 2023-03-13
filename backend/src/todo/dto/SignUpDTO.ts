@@ -12,7 +12,7 @@ export default class SignUpDTO {
     }
     static validator = [
         check("email", "Email field does not exist").exists(),
-        check("email", "Password field does not exist")
+        check("email", "Malformed email")
             .isEmail()
             .normalizeEmail(),
         check("username", "Username field does not exist").exists(),
